@@ -91,6 +91,7 @@ public:
     }
 
     void AddLine() {
+        qs_.push_back(qs_.size());
         for (int i = 0; i < table_size_.x; ++i) {
             table_[i].emplace_back(table_size_.y);
         }
@@ -108,14 +109,28 @@ public:
     const std::vector<std::vector<ValueOfTable>> &GetTable() const {
         return table_;
     }
-    const std::string &GetSyms() const {
-        return syms_;
+
+    std::vector<std::string> GetSyms() const {
+        std::vector<std::string> ans(qs_.size());
+        std::transform(syms_.begin(), syms_.end(), ans.begin(), [] (char sym) {
+            return std::string(1, sym);
+        });
+        return ans;
+    }
+
+    std::vector<std::string> GetQs() const {
+        std::vector<std::string> ans(qs_.size());
+        std::transform(qs_.begin(), qs_.end(), ans.begin(), [] (int q) {
+            return "q" + std::to_string(q);
+        });
+        return ans;
     }
 
 private:
     // table_[x][y], x - sym, y - q
     sf::Vector2f table_size_;
     std::string syms_;
+    std::vector<int> qs_;
     std::map<int,char> tape_;
     std::vector<std::vector<ValueOfTable>> table_;
 
