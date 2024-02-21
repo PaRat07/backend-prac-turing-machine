@@ -126,6 +126,10 @@ public:
         return ans;
     }
 
+    sf::Vector2i Size() const {
+        return {(int)syms_.size(), (int)qs_.size()};
+    }
+
 private:
     // table_[x][y], x - sym, y - q
     sf::Vector2f table_size_;
