@@ -13,7 +13,7 @@ class Button : public AbstractElement {
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void ProcessEvent(sf::Event event, const sf::RenderTarget &target) override;
+    void ProcessEvent(sf::Event event) override;
 
  private:
     const std::function<void()> &callback_;

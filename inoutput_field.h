@@ -9,17 +9,21 @@
 template<class BackgroundShape>
 class InputField : public AbstractElement {
 public:
-    InputField(sf::Vector2f pos, sf::Vector2f size, const sf::RenderTarget &target);
+    InputField(sf::Vector2f pos, sf::Vector2f size);
 
-    void ProcessEvent(sf::Event event, const sf::RenderTarget &target) override;
+    void ProcessEvent(sf::Event event) override;
 
-    void SetPosition(sf::Vector2f pos, const sf::RenderTarget &target) {
-        pos_ = {pos.x / target.getSize().x, pos.y / target.getSize().y};
+    void SetPosition(sf::Vector2f pos) {
+        pos_ = {pos.x / win_size.x, pos.y / win_size.y};
     }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void Write(sf::Uint32 event);
+
+    void Activate() {
+        active_ = true;
+    }
 
     const std::string &GetText() const {
         return data_;
@@ -48,23 +52,31 @@ private:
 };
 
 template<class BackgroundShape>
-InputField<BackgroundShape>::InputField(sf::Vector2f pos, sf::Vector2f size, const sf::RenderTarget &target)
-        : pos_(pos.x / target.getSize().x, pos.y / target.getSize().y)
-        , size_(size.x / target.getSize().x, size.y / target.getSize().y)
-{}
+InputField<BackgroundShape>::InputField(sf::Vector2f pos, sf::Vector2f size)
+        : pos_(pos.x / win_size.x, pos.y / win_size.y)
+        , size_(size.x / win_size.x, size.y / win_size.y)
+{
+}
 
 
 template<class BackgroundShape>
-void InputField<BackgroundShape>::ProcessEvent(sf::Event event, const sf::RenderTarget &target) {
-    sf::Vector2f pos(event.touch.x / target.getSize().x, event.touch.y / target.getSize().y);
-    active_ = std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 &&
-              std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2;
+void InputField<BackgroundShape>::ProcessEvent(sf::Event event) {
+    switch (event.type) {
+        case sf::Event::MouseButtonPressed: {
+            sf::Vector2f pos(event.touch.x / win_size.x, event.touch.y / win_size.y);
+            active_ = std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 &&
+                      std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2;
+            break;
+        }
+        case sf::Event::TextEntered:
+            Write(event.text.unicode);
+    }
 }
 
 template<class BackgroundShape>
 void InputField<BackgroundShape>::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    BackgroundShape rect(sf::Vector2f(size_.x * target.getSize().x, size_.y * target.getSize().y));
-    rect.setPosition(sf::Vector2f(pos_.x * target.getSize().x, pos_.y * target.getSize().y));
+    BackgroundShape rect(sf::Vector2f(size_.x * win_size.x, size_.y * win_size.y));
+    rect.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y));
     rect.setOutlineColor(outline_color);
 //    rect.setRoundRadius(10.f);
     rect.setFillColor(fill_color);
@@ -75,7 +87,7 @@ void InputField<BackgroundShape>::draw(sf::RenderTarget &target, sf::RenderState
     text.setFont(font);
     text.setString(data_);
     text.setCharacterSize(letter_size);
-    text.setPosition(sf::Vector2f(pos_.x * target.getSize().x, pos_.y * target.getSize().y + size_.y * target.getSize().y / 2.f - letter_size * 0.75f));
+    text.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y + size_.y * win_size.y / 2.f - letter_size * 0.75f));
     text.setFillColor(text_color);
     target.draw(text);
 }
@@ -94,7 +106,6 @@ void InputField<BackgroundShape>::Write(sf::Uint32 event) {
             case 42:
                 return;
             default:
-                std::cout << event << std::endl;
                 data_.push_back(static_cast<char>(event));
         }
     }

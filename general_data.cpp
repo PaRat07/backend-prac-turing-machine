@@ -1,3 +1,4 @@
+#include <iostream>
 #include "general_data.h"
 
 sf::Font LoadFont(std::string path) {

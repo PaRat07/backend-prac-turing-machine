@@ -14,7 +14,7 @@ public:
                 , q(cur_q)
         {}
 
-        ValueOfTable(std::string_view val, int cur_q) {
+        ValueOfTable(std::string_view val) {
             if (val[0] != ',') {
                 to_write = val[0];
                 val.remove_prefix(2);
@@ -86,7 +86,7 @@ public:
         }
     }
 
-    void SetTableValue(sf::Vector2f pos, ValueOfTable val) {
+    void SetTableValue(sf::Vector2i pos, ValueOfTable val) {
         table_[pos.x][pos.y] = val;
     }
 
