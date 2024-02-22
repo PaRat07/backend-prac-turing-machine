@@ -5,19 +5,19 @@
 
 namespace sf {
 
- class RoundedRectangleShape : public sf::Drawable {
+class RoundedRectangleShape : public sf::Drawable {
  public:
     explicit RoundedRectangleShape(sf::Vector2f size);
 
     void setSize(sf::Vector2f new_size);
 
-    [[nodiscard]] const sf::Vector2f &getSize() const {
+    const sf::Vector2f &getSize() const {
         return size_;
     }
 
     void setPosition(sf::Vector2f new_pos);
 
-    [[nodiscard]] const sf::Vector2f &getPosition() const {
+    const sf::Vector2f &getPosition() const {
         return pos_;
     }
 
@@ -25,23 +25,23 @@ namespace sf {
 
     void setOutlineColor(sf::Color new_color);
 
-     [[nodiscard]] const sf::Color &getFillColor() const {
+    const sf::Color &getFillColor() const {
         return fill_color_;
     }
 
-     [[nodiscard]] const sf::Color &getOulineColor() const {
+    const sf::Color &getOulineColor() const {
         return outline_color_;
     }
 
     void setOutlineThickness(float thick);
 
-     [[nodiscard]] float getOutlineThickness() const {
+    float getOutlineThickness() const {
         return outline_thickness_;
     }
 
     void setRoundRadius(float new_r);
 
-     [[nodiscard]] float getRoundRadius() const {
+    float getRoundRadius() const {
         return radius_;
     }
 

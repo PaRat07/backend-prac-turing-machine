@@ -31,6 +31,7 @@ void sf::RoundedRectangleShape::setRoundRadius(float new_r) {
 }
 
 void sf::RoundedRectangleShape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    std::cout << "Shape pos: " << pos_.x << std::endl;
     sf::CircleShape lu, ld, ru, rd;
 
     lu.setPointCount(50);
