@@ -67,13 +67,8 @@ public:
 
     std::string GetFrom(int pos, int len) {
         std::string ans(len, '#');
-        auto it = tape_.lower_bound(pos);
         for (int i = pos; i < pos + len; ++i) {
-            if (it->first < i) ++it;
-
-            if (it->first == i) {
-                ans[i] = it->second;
-            }
+            ans[i - pos] = Read(i);
         }
         return ans;
     }
@@ -95,6 +90,7 @@ public:
         for (int i = 0; i < table_size_.x; ++i) {
             table_[i].emplace_back(table_size_.y);
         }
+        ++table_size_.y;
     }
 
     void AddColumn(char sym) {
@@ -104,6 +100,7 @@ public:
         std::for_each(table_.back().begin(), table_.back().end(), [&cur_q] (ValueOfTable &val) {
             val = ValueOfTable(++cur_q);
         });
+        ++table_size_.x;
     }
 
     const std::vector<std::vector<ValueOfTable>> &GetTable() const {

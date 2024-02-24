@@ -22,13 +22,14 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(sprite);
 }
 
-void Button::ProcessEvent(sf::Event event) {
+bool Button::ProcessEvent(sf::Event event) {
     if (event.type == sf::Event::MouseEntered) {
         sf::Vector2f pos(event.touch.x, event.touch.y);
         if (std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 && std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2) {
             callback_();
         }
     }
+    return true;
 }
 
 Button::Button(sf::Vector2f pos, sf::Vector2f sz, std::string path, const std::function<void()> &cb)
