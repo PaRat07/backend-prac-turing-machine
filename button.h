@@ -2,21 +2,51 @@
 #include "SFML/Graphics.hpp"
 
 #include <functional>
+#include <cassert>
 
 #include "rounded_rectangle.h"
+#include "center_positioned_string.h"
 #include "general_data.h"
 #include "window.h"
 
-class Button : public AbstractElement {
- public:
-    Button(sf::Vector2f pos, sf::Vector2f sz, std::string path, const std::function<void()> &cb);
+class ButtonWithImage : public AbstractElement {
+public:
+    ButtonWithImage(sf::Vector2f pos, sf::Vector2f sz, std::string path, const std::function<void()> &cb);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     bool ProcessEvent(sf::Event event) override;
 
- private:
+private:
     const std::function<void()> &callback_;
     std::string path_to_png_;
+    sf::Vector2f size_, pos_;
+};
+
+class ButtonWithTextRelativePos : public AbstractElement {
+public:
+    ButtonWithTextRelativePos(sf::Vector2f pos, sf::Vector2f sz, std::string text, const std::function<void()> &cb);
+
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    bool ProcessEvent(sf::Event event) override;
+
+private:
+    const std::function<void()> &callback_;
+    std::string text_;
+    sf::Vector2f size_, pos_;
+};
+
+class ButtonWithTextAbsPos : public AbstractElement {
+public:
+    ButtonWithTextAbsPos(sf::Vector2f pos, sf::Vector2f sz, std::string text, const std::function<void()> &cb);
+
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    bool ProcessEvent(sf::Event event) override;
+
+private:
+    const std::function<void()> &callback_;
+    std::string text_;
     sf::Vector2f size_, pos_;
 };

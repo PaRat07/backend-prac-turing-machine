@@ -12,9 +12,12 @@ public:
                 : to_write('#')
                 , move(Move::DONT_MOVE)
                 , q(cur_q)
-        {}
+                , view("#,,q" + std::to_string(cur_q))
+        {
+        }
 
         ValueOfTable(std::string_view val) {
+            view = val;
             if (val[0] != ',') {
                 to_write = val[0];
                 val.remove_prefix(2);
@@ -40,19 +43,7 @@ public:
         }
 
         std::string ToStr() const {
-            std::string ans;
-            ans += to_write;
-            switch (move) {
-                case Move::MOVE_LEFT:
-                    ans.push_back('L');
-                    break;
-                case Move::MOVE_RIGHT:
-                    ans.push_back('R');
-                    break;
-            }
-            ans.push_back(',');
-            ans += "q" + std::to_string(q);
-            return ans;
+            return view;
         }
 
         char to_write;
@@ -63,6 +54,7 @@ public:
         };
         Move move;
         int q;
+        std::string view;
     };
 
     std::string GetFrom(int pos, int len) {
@@ -125,6 +117,20 @@ public:
 
     sf::Vector2i Size() const {
         return {(int)syms_.size(), (int)qs_.size()};
+    }
+
+    void EraseQ(int to_del) {
+        size_t ind = std::find(qs_.begin(), qs_.end(), to_del) - qs_.begin();
+        qs_.erase(qs_.begin() + ind);
+        std::for_each(table_.begin(), table_.end(), [ind] (std::vector<ValueOfTable> &v) {
+            v.erase(v.begin() + ind);
+        });
+    }
+
+    void EraseSym(char to_del) {
+        size_t ind = syms_.find(to_del);
+        syms_.erase(syms_.begin() + ind);
+        table_.erase(table_.begin() + ind);
     }
 
 private:
