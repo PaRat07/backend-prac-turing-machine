@@ -10,6 +10,7 @@ sf::Color outline_color = sf::Color(114, 114, 126);
 sf::Color text_color = sf::Color(0, 0, 0);
 sf::Color background_color = sf::Color(152, 147, 218);
 sf::Vector2f win_size = {1500, 1000};
+uint16_t fps_limit = 60;
 
 int main() {
     TuringMachine machine;

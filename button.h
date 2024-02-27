@@ -15,7 +15,7 @@ public:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    bool ProcessEvent(sf::Event event) override;
+    void ProcessEvent(sf::Event event) override;
 
 private:
     const std::function<void()> &callback_;
@@ -29,7 +29,7 @@ public:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    bool ProcessEvent(sf::Event event) override;
+    void ProcessEvent(sf::Event event) override;
 
 private:
     const std::function<void()> &callback_;
@@ -43,7 +43,7 @@ public:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    bool ProcessEvent(sf::Event event) override;
+    void ProcessEvent(sf::Event event) override;
 
 private:
     const std::function<void()> &callback_;

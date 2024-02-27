@@ -11,7 +11,7 @@ class InputField : public AbstractElement {
 public:
     InputField(sf::Vector2f pos, sf::Vector2f size);
 
-    bool ProcessEvent(sf::Event event) override;
+    void ProcessEvent(sf::Event event) override;
 
     void SetPosition(sf::Vector2f pos) {
         pos_ = {pos.x / win_size.x, pos.y / win_size.y};
@@ -60,7 +60,7 @@ InputField<BackgroundShape>::InputField(sf::Vector2f pos, sf::Vector2f size)
 
 
 template<class BackgroundShape>
-bool InputField<BackgroundShape>::ProcessEvent(sf::Event event) {
+void InputField<BackgroundShape>::ProcessEvent(sf::Event event) {
     switch (event.type) {
         case sf::Event::MouseButtonPressed: {
             sf::Vector2f pos(event.touch.x / win_size.x, event.touch.y / win_size.y);
@@ -70,9 +70,7 @@ bool InputField<BackgroundShape>::ProcessEvent(sf::Event event) {
         }
         case sf::Event::TextEntered:
             Write(event.text.unicode);
-            return true;
     }
-    return false;
 }
 
 template<class BackgroundShape>

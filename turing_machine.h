@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <SFML/System.hpp>
+#include <iostream>
 
 class TuringMachine {
 public:
@@ -131,6 +132,7 @@ public:
         size_t ind = syms_.find(to_del);
         syms_.erase(syms_.begin() + ind);
         table_.erase(table_.begin() + ind);
+        std::cerr << "Erased" << std::endl;
     }
 
 private:

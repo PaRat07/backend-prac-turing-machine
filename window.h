@@ -8,7 +8,7 @@
 
 class AbstractElement : public sf::Drawable {
 public:
-    virtual bool ProcessEvent(sf::Event event) = 0;
+    virtual void ProcessEvent(sf::Event event) = 0;
     virtual ~AbstractElement() = default;
 };
 
@@ -32,15 +32,14 @@ public:
         });
     }
 
-    bool ProcessEvent(sf::Event event, sf::Vector2f win_size) {
+    void ProcessEvent(sf::Event event, sf::Vector2f win_size) {
         // for (auto &i : elements_) {
         //     i->ProcessEvent(event, target);
         // }
-        bool ans = false;
-        std::for_each(elements_.begin(), elements_.end(), [event, &ans] (const std::unique_ptr<AbstractElement> &ptr) {
-            ans |= ptr->ProcessEvent(event);
+
+        std::for_each(elements_.begin(), elements_.end(), [event] (const std::unique_ptr<AbstractElement> &ptr) {
+            ptr->ProcessEvent(event);
         });
-        return ans;
     }
 private:
     std::vector<std::unique_ptr<AbstractElement>> elements_;
