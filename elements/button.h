@@ -6,8 +6,8 @@
 
 #include "rounded_rectangle.h"
 #include "center_positioned_string.h"
-#include "general_data.h"
-#include "window.h"
+#include "../general_data.h"
+#include "../app/window.h"
 
 class ButtonWithImage : public AbstractElement {
 public:

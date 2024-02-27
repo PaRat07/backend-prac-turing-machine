@@ -2,15 +2,15 @@
 
 #include <iostream>
 
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
 #include <future>
 #include <optional>
 #include <cmath>
 
 #include "center_positioned_string.h"
-#include "turing_machine.h"
-#include "window.h"
-#include "general_data.h"
+#include "../turing_machine.h"
+#include "../app/window.h"
+#include "../general_data.h"
 #include "rounded_rectangle.h"
 #include "inoutput_field.h"
 #include "button.h"

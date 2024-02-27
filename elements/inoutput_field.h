@@ -3,8 +3,8 @@
 #include "SFML/Graphics.hpp"
 
 #include "rounded_rectangle.h"
-#include "general_data.h"
-#include "window.h"
+#include "../general_data.h"
+#include "../app/window.h"
 
 template<class BackgroundShape>
 class InputField : public AbstractElement {

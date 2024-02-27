@@ -7,7 +7,7 @@
 #include <future>
 
 #include "window.h"
-#include "general_data.h"
+#include "../general_data.h"
 
 
 

@@ -9,15 +9,15 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(prac
         main.cpp
-        turing_machine.cpp
-        tape.cpp
-        table.cpp
-        window.cpp
-        button.cpp
-        center_positioned_string.cpp
-        general_data.cpp
-        inoutput_field.cpp
-        rounded_rectangle.cpp
-        window_manager.cpp)
+        src/turing_machine.cpp
+        src/tape.cpp
+        src/table.cpp
+        src/window.cpp
+        src/button.cpp
+        src/center_positioned_string.cpp
+        src/general_data.cpp
+        src/inoutput_field.cpp
+        src/rounded_rectangle.cpp
+        src/window_manager.cpp)
 
 target_link_libraries(prac PRIVATE sfml-graphics)

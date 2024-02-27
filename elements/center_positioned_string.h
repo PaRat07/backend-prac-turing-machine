@@ -2,7 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 
-#include "general_data.h"
+#include "../general_data.h"
 
 class CenterPositionedString : public sf::Drawable {
  public:

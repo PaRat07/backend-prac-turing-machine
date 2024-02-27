@@ -1,4 +1,4 @@
-#include "center_positioned_string.h"
+#include "../elements/center_positioned_string.h"
 
 void CenterPositionedString::setPosition(float x, float y) {
     pos_ = { x, y };

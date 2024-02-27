@@ -1,6 +1,6 @@
-#include "window.h"
-#include "table.h"
-#include "window_manager.h"
+#include "app/window.h"
+#include "elements/table.h"
+#include "app/window_manager.h"
 #include "general_data.h"
 
 sf::Font font = LoadFont("../JetBrainsMono-Medium.ttf");

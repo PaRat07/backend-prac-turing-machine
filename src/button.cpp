@@ -1,4 +1,4 @@
-#include "button.h"
+#include "../elements/button.h"
 
 void ButtonWithImage::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::RoundedRectangleShape rect(size_);
