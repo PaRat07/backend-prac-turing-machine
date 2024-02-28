@@ -21,9 +21,7 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 
     // net + vals
-
-    target.setActive(false);
-    auto net_drawer = std::async([&] () {
+    {
         sf::Sprite net_sprite;
         sf::RenderTexture net_texture;
         net_texture.setActive();
@@ -62,9 +60,7 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         net_sprite.setTexture(net_texture.getTexture());
         net_sprite.setPosition(cell_size.x * 2 + 12, cell_size.y * 2 + 12);
         target.draw(net_sprite);
-    });
-    net_drawer.wait();
-    target.setActive(true);
+    }
 
     buttons_qs_mutex_.lock();
     buttons_qs_.clear();
