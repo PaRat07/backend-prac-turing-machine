@@ -11,4 +11,3 @@ extern sf::Color fill_color;
 extern sf::Font font;
 extern float letter_size;
 extern sf::Vector2f win_size;
-extern uint16_t fps_limit;

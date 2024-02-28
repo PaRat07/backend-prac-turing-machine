@@ -3,7 +3,7 @@
 #include "SFML/Graphics.hpp"
 
 #include "rounded_rectangle.h"
-#include "../general_data.h"
+#include "../app/general_data.h"
 #include "../app/window.h"
 
 template<class BackgroundShape>

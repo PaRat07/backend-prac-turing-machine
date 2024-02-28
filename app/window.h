@@ -27,12 +27,13 @@ public:
         // for (auto &i : elements_) {
         //     target.draw(*i);
         // }
+
         std::for_each(elements_.begin(), elements_.end(), [&target] (const std::unique_ptr<AbstractElement> &ptr) {
             target.draw(*ptr);
         });
     }
 
-    void ProcessEvent(sf::Event event, sf::Vector2f win_size) {
+    void ProcessEvent(sf::Event event) {
         // for (auto &i : elements_) {
         //     i->ProcessEvent(event, target);
         // }

@@ -6,7 +6,7 @@
 
 #include "rounded_rectangle.h"
 #include "center_positioned_string.h"
-#include "../general_data.h"
+#include "../app/general_data.h"
 #include "../app/window.h"
 
 class ButtonWithImage : public AbstractElement {
@@ -18,7 +18,7 @@ public:
     void ProcessEvent(sf::Event event) override;
 
 private:
-    const std::function<void()> &callback_;
+    std::function<void()> callback_;
     std::string path_to_png_;
     sf::Vector2f size_, pos_;
 };
@@ -32,7 +32,7 @@ public:
     void ProcessEvent(sf::Event event) override;
 
 private:
-    const std::function<void()> &callback_;
+    std::function<void()> callback_;
     std::string text_;
     sf::Vector2f size_, pos_;
 };
@@ -46,7 +46,7 @@ public:
     void ProcessEvent(sf::Event event) override;
 
 private:
-    const std::function<void()> &callback_;
+    std::function<void()> callback_;
     std::string text_;
     sf::Vector2f size_, pos_;
 };

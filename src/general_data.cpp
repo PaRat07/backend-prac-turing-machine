@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../general_data.h"
+#include "../app/general_data.h"
 
 sf::Font LoadFont(std::string path) {
     sf::Font ans;

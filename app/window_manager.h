@@ -7,7 +7,7 @@
 #include <future>
 
 #include "window.h"
-#include "../general_data.h"
+#include "general_data.h"
 
 
 
@@ -20,11 +20,11 @@ public:
     void Start() {
         sf::RenderWindow win(sf::VideoMode(win_size.x, win_size.y), "TuringMachineSimulator", sf::Style::Default);
 
-
         win.setActive(false);
         bool close = false;
         auto displayer = std::async([&] () {
-            while (win.isOpen()) {
+            win.setVerticalSyncEnabled(true);
+            while (true) {
                 if (close) {
                     win.close();
                     return;
@@ -32,11 +32,17 @@ public:
                 win.clear(background_color);
                 win.draw(windows_[active_]);
                 win.display();
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000 / fps_limit));
             }
         });
+
         sf::Event event;
         while (win.isOpen() && win.waitEvent(event)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) &&
+                sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab)) {
+                ++active_;
+                active_ %= windows_.size();
+                break;
+            }
             switch (event.type) {
                 case sf::Event::Closed: {
                     close = true;
@@ -49,15 +55,9 @@ public:
                     win.setView(sf::View(visibleArea));
                     break;
                 }
-                case sf::Event::TextEntered:
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) &&
-                        sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab)) {
-                        ++active_;
-                        active_ %= windows_.size();
-                        break;
-                    }
                 default: {
-                    windows_[active_].ProcessEvent(event, sf::Vector2f(win.getSize()));
+                    windows_[active_].ProcessEvent(event);
+                    break;
                 }
             }
         }

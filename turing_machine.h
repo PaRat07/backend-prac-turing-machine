@@ -122,6 +122,7 @@ public:
 
     void EraseQ(int to_del) {
         size_t ind = std::find(qs_.begin(), qs_.end(), to_del) - qs_.begin();
+        if (ind == qs_.size()) return;
         qs_.erase(qs_.begin() + ind);
         std::for_each(table_.begin(), table_.end(), [ind] (std::vector<ValueOfTable> &v) {
             v.erase(v.begin() + ind);
@@ -130,6 +131,8 @@ public:
 
     void EraseSym(char to_del) {
         size_t ind = syms_.find(to_del);
+        if (ind == std::string::npos) return;
+
         syms_.erase(syms_.begin() + ind);
         table_.erase(table_.begin() + ind);
         std::cerr << "Erased" << std::endl;

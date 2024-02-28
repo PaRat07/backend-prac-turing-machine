@@ -88,10 +88,9 @@ void ButtonWithTextAbsPos::draw(sf::RenderTarget &target, sf::RenderStates state
 
 void ButtonWithTextAbsPos::ProcessEvent(sf::Event event) {
     if (event.type == sf::Event::MouseButtonPressed) {
-        std::cerr << "Processed" << std::endl;
         sf::Vector2f pos(event.touch.x, event.touch.y);
-        if (std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 && std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2) {
-            std::cerr << "Called backed" << std::endl;
+        if (std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 &&
+            std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2) {
             callback_();
         }
     }
