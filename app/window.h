@@ -23,25 +23,9 @@ public:
         elements_.emplace_back(std::move(new_elem));
     }
 
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override {
-        // for (auto &i : elements_) {
-        //     target.draw(*i);
-        // }
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-        std::for_each(elements_.begin(), elements_.end(), [&target] (const std::unique_ptr<AbstractElement> &ptr) {
-            target.draw(*ptr);
-        });
-    }
-
-    void ProcessEvent(sf::Event event) {
-        // for (auto &i : elements_) {
-        //     i->ProcessEvent(event, target);
-        // }
-
-        std::for_each(elements_.begin(), elements_.end(), [event] (const std::unique_ptr<AbstractElement> &ptr) {
-            ptr->ProcessEvent(event);
-        });
-    }
+    void ProcessEvent(sf::Event event);
 private:
     std::vector<std::unique_ptr<AbstractElement>> elements_;
 };
