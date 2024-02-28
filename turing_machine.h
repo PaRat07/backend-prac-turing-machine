@@ -101,7 +101,7 @@ public:
     }
 
     std::vector<std::string> GetSyms() const {
-        std::vector<std::string> ans(qs_.size());
+        std::vector<std::string> ans(syms_.size());
         std::transform(syms_.begin(), syms_.end(), ans.begin(), [] (char sym) {
             return std::string(1, sym);
         });
@@ -120,7 +120,8 @@ public:
         return {(int)syms_.size(), (int)qs_.size()};
     }
 
-    void EraseQ(int to_del) {
+    void EraseQ(std::string q) {
+        int to_del = std::stoi(q.substr(1));
         size_t ind = std::find(qs_.begin(), qs_.end(), to_del) - qs_.begin();
         if (ind == qs_.size()) return;
         qs_.erase(qs_.begin() + ind);

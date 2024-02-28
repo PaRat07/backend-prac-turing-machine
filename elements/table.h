@@ -40,7 +40,7 @@ public:
         {
             sf::RenderTexture net_texture;
             sf::Sprite net_sprite;
-            net_texture.create(real_size.x - cell_size.x - 24, real_size.y - cell_size.y * 2 - 24);
+            net_texture.create(real_size.x - cell_size.x  * 2 - 24, real_size.y - cell_size.y * 2 - 24);
             net_texture.clear(background_color);
             sf::RectangleShape line(sf::Vector2f(std::min(real_size.x - 24, machine_.Size().x * cell_size.x), 2));
             line.setFillColor(outline_color);
@@ -73,24 +73,35 @@ public:
             }
             net_texture.display();
             net_sprite.setTexture(net_texture.getTexture());
-            net_sprite.setPosition(cell_size.x + 12, cell_size.y * 2 + 12);
+            net_sprite.setPosition(cell_size.x * 2 + 12, cell_size.y * 2 + 12);
             target.draw(net_sprite);
         }
 
-
+        buttons_qs_mutex_.lock();
+        buttons_qs_.clear();
+        for (int i = 0; i < machine_.Size().y; ++i) {
+            std::string to_del = machine_.GetQs()[i];
+            ButtonWithTextAbsPos erase_q(sf::Vector2f(12 + cell_size.x * 0.5, (i + 0.5) * cell_size.y + pos_in_.y),
+                                           sf::Vector2f(40, 30),
+                                           "del",
+                                           std::bind(&TuringMachine::EraseQ, &machine_, to_del));
+            buttons_qs_.push_back(erase_q);
+        }
+        buttons_qs_mutex_.unlock();
         // qs
         {
             std::vector<std::string> qs_vals = machine_.GetQs();
             sf::RenderTexture qs;
-            qs.create(cell_size.x, real_size.y - cell_size.y * 2 - 24);
+            qs.create(cell_size.x * 2, real_size.y - cell_size.y * 2 - 24);
             qs.clear(sf::Color::Transparent);
             CenterPositionedString str;
             for (int i = -pos_in_.y / cell_size.y; i < qs_vals.size() && i * cell_size.y + pos_in_.y < std::min(real_size.y, machine_.Size().y * cell_size.y); ++i) {
                 str.setString(qs_vals[i]);
-                str.setPosition(sf::Vector2f(cell_size.x / 2, i * cell_size.y + cell_size.y / 2 + pos_in_.y));
+                str.setPosition(sf::Vector2f(cell_size.x * 1.5, i * cell_size.y + cell_size.y / 2 + pos_in_.y));
                 qs.draw(str);
+                qs.draw(buttons_qs_[i]);
             }
-            sf::RectangleShape line(sf::Vector2f(cell_size.x, 2));
+            sf::RectangleShape line(sf::Vector2f(cell_size.x * 2, 2));
             line.setFillColor(outline_color);
 
             for (int i = pos_in_.y % cell_size.y; i < std::min(real_size.y, machine_.Size().y * cell_size.y); i += cell_size.y) {
@@ -104,29 +115,29 @@ public:
             target.draw(sprite);
         }
 
-        button_mutex_.lock();
-        buttons_.clear();
+        buttons_syms_mutex_.lock();
+        buttons_syms_.clear();
         for (int i = 0; i < machine_.Size().x; ++i) {
             char to_del = machine_.GetSyms()[i][0];
-            ButtonWithTextAbsPos erase_sym(sf::Vector2f((i + 0.5) * cell_size.x + pos_in_.x, 12 + cell_size.y / 2),
+            ButtonWithTextAbsPos erase_sym(sf::Vector2f((i + 0.5) * cell_size.x + pos_in_.x, cell_size.y / 2),
                                            sf::Vector2f(40, 30),
                                            "del",
                                            std::bind(&TuringMachine::EraseSym, &machine_, to_del));
-            buttons_.push_back(erase_sym);
+            buttons_syms_.push_back(erase_sym);
         }
-        button_mutex_.unlock();
+        buttons_syms_mutex_.unlock();
         // syms
         {
             std::vector<std::string> syms_vals = machine_.GetSyms();
             sf::RenderTexture syms;
-            syms.create(real_size.x - cell_size.x - 24, cell_size.y * 2);
+            syms.create(real_size.x - cell_size.x * 2 - 24, cell_size.y * 2);
             syms.clear(sf::Color::Transparent);
             CenterPositionedString str;
-            for (int i = -pos_in_.x / cell_size.x; i < syms_vals.size() && i * cell_size.x + pos_in_.x < std::min(real_size.x, machine_.Size().x * cell_size.x) && i < buttons_.size(); ++i) {
+            for (int i = -pos_in_.x / cell_size.x; i < syms_vals.size() && i * cell_size.x + pos_in_.x < std::min(real_size.x, machine_.Size().x * cell_size.x) && i < buttons_syms_.size(); ++i) {
                 str.setString(syms_vals[i]);
                 str.setPosition(sf::Vector2f(i * cell_size.x + cell_size.x / 2 + pos_in_.x, cell_size.y * 1.5));
                 syms.draw(str);
-                syms.draw(buttons_[i]);
+                syms.draw(buttons_syms_[i]);
             }
             sf::RectangleShape line(sf::Vector2f(2, cell_size.y * 2));
             line.setFillColor(outline_color);
@@ -137,7 +148,7 @@ public:
             }
             syms.display();
             sf::Sprite sprite;
-            sprite.setPosition(cell_size.x + 12, 12);
+            sprite.setPosition(cell_size.x * 2 + 12, 12);
             sprite.setTexture(syms.getTexture());
             target.draw(sprite);
         }
@@ -156,13 +167,13 @@ public:
             sf::RectangleShape legend_border(sf::Vector2f(2, std::min(real_size.y - 24, machine_.Size().y * cell_size.y)));
             legend_border.setFillColor(outline_color);
             target.draw(legend_border);
-            legend_border.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 12 + cell_size.x, pos_.y * target.getSize().y + 12));
+            legend_border.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 12 + cell_size.x * 2, pos_.y * target.getSize().y + 12));
             target.draw(legend_border);
         }
 
         // frame
         {
-            sf::RectangleShape table_border(sf::Vector2f(std::min(real_size.x - 24, (machine_.Size().x + 1) * cell_size.x - 2), std::min(real_size.y - 24, (machine_.Size().y + 2) * cell_size.y - 2)));
+            sf::RectangleShape table_border(sf::Vector2f(std::min(real_size.x - 24, (machine_.Size().x + 2) * cell_size.x - 2), std::min(real_size.y - 24, (machine_.Size().y + 2) * cell_size.y - 2)));
             table_border.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 14, pos_.y * target.getSize().y + 14));
             table_border.setFillColor(sf::Color::Transparent);
             table_border.setOutlineThickness(2);
@@ -187,14 +198,26 @@ public:
                                                     active_pos_->y * cell_size.y + pos_in_.y + 2));
             }
             case sf::Event::EventType::MouseButtonPressed: {
-                sf::Event ev_for_buts = event;
-                ev_for_buts.mouseButton.y -= 12;
-                ev_for_buts.mouseButton.x -= cell_size.x + 12;
-                button_mutex_.lock();
-                std::for_each(buttons_.begin(), buttons_.end(), [&ev_for_buts] (ButtonWithTextAbsPos & but) {
-                    but.ProcessEvent(ev_for_buts);
-                });
-                button_mutex_.unlock();
+                {
+                    sf::Event ev_for_buts = event;
+                    ev_for_buts.mouseButton.y -= 12;
+                    ev_for_buts.mouseButton.x -= cell_size.x * 2 + 12;
+                    buttons_syms_mutex_.lock();
+                    std::for_each(buttons_syms_.begin(), buttons_syms_.end(),
+                                  [&ev_for_buts](ButtonWithTextAbsPos &but) {
+                                      but.ProcessEvent(ev_for_buts);
+                                  });
+                    buttons_syms_mutex_.unlock();
+                    ev_for_buts = event;
+                    ev_for_buts.mouseButton.y -= cell_size.y * 2 + 12;
+                    ev_for_buts.mouseButton.x -= 12;
+                    buttons_qs_mutex_.lock();
+                    std::for_each(buttons_qs_.begin(), buttons_qs_.end(),
+                                  [&ev_for_buts](ButtonWithTextAbsPos &but) {
+                                      but.ProcessEvent(ev_for_buts);
+                                  });
+                    buttons_qs_mutex_.unlock();
+                }
                 pos_in_.x = std::max(pos_in_.x, (int) (-GetTableSize().x + size_.x * win_size.x - 24));
                 pos_in_.x = std::min(pos_in_.x, 0);
                 pos_in_.y = std::max(pos_in_.y, (int) (-GetTableSize().y + size_.y * win_size.y - 24));
@@ -229,8 +252,10 @@ private:
     sf::Vector2f pos_, size_;
     sf::Vector2i pos_in_ = {0,0};
     std::optional<sf::Vector2i> active_pos_;
-    mutable std::vector<ButtonWithTextAbsPos> buttons_;
-    mutable std::mutex button_mutex_;
+    mutable std::vector<ButtonWithTextAbsPos> buttons_syms_;
+    mutable std::mutex buttons_syms_mutex_;
+    mutable std::vector<ButtonWithTextAbsPos> buttons_qs_;
+    mutable std::mutex buttons_qs_mutex_;
     std::optional<InputField<sf::RectangleShape>> field;
 
     sf::Vector2i GetTableSize() const {
