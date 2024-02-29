@@ -28,15 +28,6 @@ public:
 
     void MoveRight() {
         if (!animation_.has_value()) {
-            animation_ ={pos_in_, pos_in_ + cell_size.x,
-                               std::chrono::steady_clock::now(),
-                               std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
-                        };
-        }
-    }
-
-    void MoveLeft() {
-        if (!animation_.has_value()) {
             animation_ ={pos_in_, pos_in_ - cell_size.x,
                          std::chrono::steady_clock::now(),
                          std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
@@ -44,12 +35,23 @@ public:
         }
     }
 
+    void MoveLeft() {
+        if (!animation_.has_value()) {
+            animation_ ={pos_in_, pos_in_ + cell_size.x,
+                         std::chrono::steady_clock::now(),
+                         std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
+            };
+        }
+    }
+
     // ms
-    long animation_time = 1'000;
+    long animation_time = 350;
 private:
     TuringMachine &machine_;
-    float pos_in_ = 0;
+    mutable float pos_in_ = 0;
     float y_pos_;
     std::optional<int> active_pos_;
-    std::optional<Animation> animation_;
+    mutable std::optional<Animation> animation_;
+
+    static double CalcPercentage(double done);
 };

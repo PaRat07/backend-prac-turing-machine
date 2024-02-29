@@ -20,6 +20,7 @@ void Tape::ProcessEvent(sf::Event event) {
         }
         case sf::Event::TextEntered: {
             if (active_pos_.has_value()) {
+                std::cout << event.text.unicode << std::endl;
                 machine_.Write(*active_pos_, event.text.unicode);
                 ++*active_pos_;
             }
@@ -30,10 +31,26 @@ void Tape::ProcessEvent(sf::Event event) {
                 pos_in_ += event.mouseWheelScroll.delta * 3;
             }
             break;
+        case sf::Event::KeyPressed:
+            if (event.key.code == sf::Keyboard::Left) {
+                MoveLeft();
+            } else if (event.key.code == sf::Keyboard::Right) {
+                MoveRight();
+            }
+            break;
     }
 }
 
 void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (animation_.has_value()) {
+        auto cur_time = std::chrono::steady_clock::now();
+        if (animation_->to_time <= cur_time) {
+            pos_in_ = animation_->to_pos;
+            animation_.reset();
+        } else {
+            pos_in_ = animation_->from_pos + (animation_->to_pos - animation_->from_pos) * CalcPercentage(1. * (cur_time - animation_->from_time).count() / (animation_->to_time - animation_->from_time).count());
+        }
+    }
     // up+down
     {
         sf::RectangleShape line;
@@ -62,7 +79,7 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     // vals
     {
         CenterPositionedString str;
-        for (int i = pos_in_ / cell_size.x - 1; (i - 1)  * cell_size.x + pos_in_ <= win_size.x; ++i) {
+        for (int i = -pos_in_ / cell_size.x - 1; (i - 1)  * cell_size.x + pos_in_ <= win_size.x; ++i) {
             str.setString(sf::String(machine_.Read(i)));
             str.setPosition(i * cell_size.x + pos_in_ - cell_size.x / 2, y_pos_ + cell_size.y / 2);
             target.draw(str);
@@ -74,4 +91,8 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         sf::RectangleShape rect((sf::Vector2f(cell_size)));
         rect.setPosition(*active_pos_ * cell_size.x - pos_in_, y_pos_);
     }
+}
+
+double Tape::CalcPercentage(double done) {
+    return done;
 }
