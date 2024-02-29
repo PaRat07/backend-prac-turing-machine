@@ -18,6 +18,8 @@ add_executable(prac
         src/general_data.cpp
         src/inoutput_field.cpp
         src/rounded_rectangle.cpp
-        src/window_manager.cpp)
+        src/window_manager.cpp
+        elements/tape_head.h
+        src/tape_head.cpp)
 
 target_link_libraries(prac PRIVATE sfml-graphics)

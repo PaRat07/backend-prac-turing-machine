@@ -90,9 +90,5 @@ void WindowManager::Start() {
 }
 
 double WindowManager::GetPercantage(double time_gone) {
-    if (time_gone >= 0.5) {
-        return 1 - (1 - time_gone) * (2 - 2 * time_gone);
-    } else {
-        return time_gone * (2 * time_gone);
-    }
+    return std::sin(time_gone * M_PI_2);
 }

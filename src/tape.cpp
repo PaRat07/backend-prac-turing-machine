@@ -1,7 +1,7 @@
 #include "../elements/tape.h"
 
 
-sf::Vector2i Tape::cell_size = { 50, 50 };
+sf::Vector2i Tape::cell_size = { 100, 50 };
 
 Tape::Tape(TuringMachine &mach, float y_pos)
         : machine_(mach)
@@ -94,5 +94,25 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 double Tape::CalcPercentage(double done) {
-    return done;
+    return std::cos(M_PI_2 * done);
 }
+
+void Tape::MoveRight() {
+    if (!animation_.has_value()) {
+        animation_ ={pos_in_, pos_in_ - cell_size.x,
+                     std::chrono::steady_clock::now(),
+                     std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
+        };
+    }
+}
+
+void Tape::MoveLeft() {
+    if (!animation_.has_value()) {
+        animation_ ={pos_in_, pos_in_ + cell_size.x,
+                     std::chrono::steady_clock::now(),
+                     std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
+        };
+    }
+}
+
+long Tape::animation_time = 500;

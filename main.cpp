@@ -3,6 +3,7 @@
 #include "app/window_manager.h"
 #include "app/general_data.h"
 #include "elements/tape.h"
+#include "elements/tape_head.h"
 
 sf::Font font = LoadFont("../app/3270NerdFontMono-Regular.ttf");
 float letter_size = 20.f;
@@ -34,6 +35,7 @@ int main() {
     {
         Window win_tape;
         win_tape.AddElement(std::make_unique<Tape>(machine, 100));
+        win_tape.AddElement(std::make_unique<TapeHead>(160));
 
         wm.AddWindow(std::move(win_tape));
     }

@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <optional>
+#include <cmath>
 
 #include "SFML/Graphics.hpp"
 
@@ -26,26 +27,12 @@ public:
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-    void MoveRight() {
-        if (!animation_.has_value()) {
-            animation_ ={pos_in_, pos_in_ - cell_size.x,
-                         std::chrono::steady_clock::now(),
-                         std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
-            };
-        }
-    }
+    void MoveRight();
 
-    void MoveLeft() {
-        if (!animation_.has_value()) {
-            animation_ ={pos_in_, pos_in_ + cell_size.x,
-                         std::chrono::steady_clock::now(),
-                         std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
-            };
-        }
-    }
+    void MoveLeft();
 
     // ms
-    long animation_time = 350;
+    static long animation_time;
 private:
     TuringMachine &machine_;
     mutable float pos_in_ = 0;
