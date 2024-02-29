@@ -7,6 +7,7 @@
 #include "rounded_rectangle.h"
 #include "../app/general_data.h"
 #include "../app/window.h"
+#include "center_positioned_string.h"
 
 template<class BackgroundShape>
 class InputField : public AbstractElement {
@@ -86,12 +87,9 @@ void InputField<BackgroundShape>::draw(sf::RenderTarget &target, sf::RenderState
     rect.setOutlineThickness(2);
     target.draw(rect);
 
-    sf::Text text;
-    text.setFont(font);
+    CenterPositionedString text;
     text.setString(data_);
-    text.setCharacterSize(letter_size);
-    text.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y + size_.y * win_size.y / 2.f - letter_size * 0.75f));
-    text.setFillColor(text_color);
+    text.setPosition(sf::Vector2f(pos_.x * win_size.x + size_.x * win_size.x / 2, pos_.y * win_size.y + size_.y * win_size.y - letter_size * 0.75f));
     target.draw(text);
 }
 

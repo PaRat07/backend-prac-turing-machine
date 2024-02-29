@@ -5,49 +5,53 @@
 #include <vector>
 #include <SFML/System.hpp>
 #include <iostream>
+#include "app/general_data.h"
 
 class TuringMachine {
 public:
     struct ValueOfTable {
         ValueOfTable(int cur_q)
-                : to_write('#')
+                : to_write(lambda)
                 , move(Move::DONT_MOVE)
                 , q(cur_q)
-                , view("#,,q" + std::to_string(cur_q))
+                , view(lambda + ",,q" + std::to_string(cur_q))
         {
         }
 
-        ValueOfTable(std::string_view val) {
-            view = val;
+        ValueOfTable(std::string_view val, int q_val) {
             if (val[0] != ',') {
                 to_write = val[0];
                 val.remove_prefix(2);
             } else {
-                to_write = '#';
+                to_write = lambda;
                 val.remove_prefix(1);
             }
+            view += sf::String(to_write + ',');
 
             if (val[0] != ',') {
+                view += val[0];
                 move = (val[0] == 'L' ? Move::MOVE_LEFT : Move::MOVE_RIGHT);
                 val.remove_prefix(2);;
             } else {
                 move = Move::DONT_MOVE;
                 val.remove_prefix(1);
             }
+            view += ',';
 
             if (!val.empty()) {
                 val.remove_prefix(1);
                 q = std::stoi(std::string(val));
             } else {
-                q = -1;
+                q = q_val;
             }
+            view += "q" + std::to_string(q);
         }
 
-        std::string ToStr() const {
+        sf::String ToStr() const {
             return view;
         }
 
-        char to_write;
+        sf::String to_write;
         enum class Move {
             DONT_MOVE = 0,
             MOVE_LEFT = 1,
@@ -55,19 +59,19 @@ public:
         };
         Move move;
         int q;
-        std::string view;
+        sf::String view;
     };
 
-    std::string GetFrom(int pos, int len) {
-        std::string ans(len, '#');
+    sf::String GetFrom(int pos, int len) {
+        sf::String ans;
         for (int i = pos; i < pos + len; ++i) {
-            ans[i - pos] = Read(i);
+            ans[i - pos] = Read(i)[0];
         }
         return ans;
     }
 
-    void Write(int pos, char sym) {
-        if (sym == '#') {
+    void Write(int pos, sf::String sym) {
+        if (sym == "ld") {
             tape_.erase(pos);
         } else {
             tape_[pos] = sym;
@@ -136,11 +140,10 @@ public:
 
         syms_.erase(syms_.begin() + ind);
         table_.erase(table_.begin() + ind);
-        std::cerr << "Erased" << std::endl;
     }
 
-    char Read(int pos) {
-        return (tape_.count(pos) ? tape_[pos] : '#');
+    sf::String Read(int pos) {
+        return (tape_.count(pos) ? tape_[pos] : lambda);
     }
 
 private:
@@ -148,6 +151,6 @@ private:
     sf::Vector2f table_size_;
     std::string syms_;
     std::vector<int> qs_;
-    std::map<int,char> tape_;
+    std::map<int, sf::String> tape_;
     std::vector<std::vector<ValueOfTable>> table_;
 };

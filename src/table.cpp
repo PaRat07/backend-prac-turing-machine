@@ -181,6 +181,7 @@ void Table::ProcessEvent(sf::Event event) {
             }
             field->SetPosition(sf::Vector2f(active_pos_->x * cell_size.x + pos_in_.x + 2,
                                                 active_pos_->y * cell_size.y + pos_in_.y + 2));
+            break;
         }
         case sf::Event::EventType::MouseButtonPressed: {
             {
@@ -218,11 +219,12 @@ void Table::ProcessEvent(sf::Event event) {
                               sf::Vector2f(cell_size.x - 2, cell_size.y - 2));
                 field->Activate();
             }
+            break;
         }
         case sf::Event::TextEntered:
             if (field.has_value()) {
                 if (event.text.unicode == 13) {
-                    machine_.SetTableValue(*active_pos_, TuringMachine::ValueOfTable(field->GetText()));
+                    machine_.SetTableValue(*active_pos_, TuringMachine::ValueOfTable(field->GetText(), active_pos_->y));
                 }
                 else {
                     field->ProcessEvent(event);

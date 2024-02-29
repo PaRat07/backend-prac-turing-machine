@@ -8,7 +8,7 @@ void CenterPositionedString::setPosition(sf::Vector2f pos) {
     pos_ = pos;
 }
 
-void CenterPositionedString::setString(std::string s) {
+void CenterPositionedString::setString(sf::String s) {
     data_ = std::move(s);
 }
 

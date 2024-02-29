@@ -10,13 +10,13 @@ class CenterPositionedString : public sf::Drawable {
 
     void setPosition(sf::Vector2f pos);
 
-    void setString(std::string s);
+    void setString(sf::String s);
 
     void setBackground(sf::Color color);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
  private:
     sf::Color background_color_ = text_color;
-    std::string data_;
+    sf::String data_;
     sf::Vector2f pos_ = { 0, 0 };
 };

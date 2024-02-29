@@ -19,7 +19,7 @@ void WindowManager::Start() {
                     anim_.reset();
                     win.draw(windows_[active_]);
                 } else {
-                    double percentage = 1. * (anim_->end - cur_time).count() / (anim_->end - anim_->beg).count();
+                    double percentage = 1. - GetPercantage(1. * (cur_time - anim_->beg).count() / (anim_->end - anim_->beg).count());
                     int border = win_size.x * percentage;
                     {
                         sf::RenderTexture from;
@@ -54,11 +54,6 @@ void WindowManager::Start() {
 
     sf::Event event;
     while (win.isOpen() && win.waitEvent(event)) {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) &&
-            sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Tab)) {
-            ++active_;
-            active_ %= windows_.size();
-        }
         switch (event.type) {
             case sf::Event::Closed: {
                 close = true;
@@ -79,7 +74,7 @@ void WindowManager::Start() {
                                             .from = active_,
                                             .to = (active_ + 1) % windows_.size(),
                                             .beg = std::chrono::steady_clock::now(),
-                                            .end = std::chrono::steady_clock::now() + std::chrono::milliseconds(200)
+                                            .end = std::chrono::steady_clock::now() + std::chrono::milliseconds(350)
                                         };
                     ++active_;
                     active_ %= windows_.size();
@@ -91,5 +86,13 @@ void WindowManager::Start() {
                 break;
             }
         }
+    }
+}
+
+double WindowManager::GetPercantage(double time_gone) {
+    if (time_gone >= 0.5) {
+        return 1 - (1 - time_gone) * (2 - 2 * time_gone);
+    } else {
+        return time_gone * (2 * time_gone);
     }
 }

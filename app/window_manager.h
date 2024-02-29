@@ -6,6 +6,7 @@
 #include <thread>
 #include <future>
 #include <optional>
+#include <cmath>
 
 #include "window.h"
 #include "general_data.h"
@@ -29,4 +30,6 @@ private:
     size_t active_ = 0;
     std::optional<Animation> anim_;
     std::vector<Window> windows_;
+
+    static double GetPercantage(double time_gone);
 };
