@@ -1,3 +1,5 @@
+#pragma once
+
 #include <functional>
 
 #include "SFML/Graphics.hpp"
@@ -70,6 +72,7 @@ void InputField<BackgroundShape>::ProcessEvent(sf::Event event) {
         }
         case sf::Event::TextEntered:
             Write(event.text.unicode);
+            break;
     }
 }
 

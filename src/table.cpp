@@ -180,7 +180,7 @@ void Table::ProcessEvent(sf::Event event) {
                 pos_in_.x = std::min(pos_in_.x, 0);
             }
             field->SetPosition(sf::Vector2f(active_pos_->x * cell_size.x + pos_in_.x + 2,
-                                            active_pos_->y * cell_size.y + pos_in_.y + 2));
+                                                active_pos_->y * cell_size.y + pos_in_.y + 2));
         }
         case sf::Event::EventType::MouseButtonPressed: {
             {
@@ -211,10 +211,10 @@ void Table::ProcessEvent(sf::Event event) {
             sf::Vector2f pos(event.touch.x / win_size.x, event.touch.y / win_size.y);
             if (std::abs(pos_.x + size_.x / 2 - pos.x) <= size_.x / 2 &&
                 std::abs(pos_.x + size_.x / 2 - pos.x) <= size_.x / 2) {
-                active_pos_.emplace((event.mouseButton.x - pos_in_.x - 14) / cell_size.x - 1,
+                active_pos_.emplace((event.mouseButton.x - pos_in_.x - 14 - cell_size.x) / cell_size.x - 1,
                                     (event.mouseButton.y - pos_in_.y - 14 - cell_size.y) / cell_size.y - 1);
                 field.emplace(sf::Vector2f(active_pos_->x * cell_size.x + pos_in_.x + 2,
-                                           active_pos_->y * cell_size.y + pos_in_.y + 2),
+                                                active_pos_->y * cell_size.y + pos_in_.y + 2),
                               sf::Vector2f(cell_size.x - 2, cell_size.y - 2));
                 field->Activate();
             }

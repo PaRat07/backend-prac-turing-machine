@@ -139,6 +139,10 @@ public:
         std::cerr << "Erased" << std::endl;
     }
 
+    char Read(int pos) {
+        return (tape_.count(pos) ? tape_[pos] : '#');
+    }
+
 private:
     // table_[x][y], x - sym, y - q
     sf::Vector2f table_size_;
@@ -146,9 +150,4 @@ private:
     std::vector<int> qs_;
     std::map<int,char> tape_;
     std::vector<std::vector<ValueOfTable>> table_;
-
-
-    char Read(int pos) {
-        return (tape_.count(pos) ? tape_[pos] : '#');
-    }
 };
