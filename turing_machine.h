@@ -71,7 +71,7 @@ public:
     }
 
     void Write(int pos, sf::String sym) {
-        if (sym == "ld") {
+        if (sym == lambda) {
             tape_.erase(pos);
         } else {
             tape_[pos] = sym;

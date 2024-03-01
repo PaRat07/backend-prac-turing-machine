@@ -13,6 +13,7 @@ sf::Color text_color = sf::Color(0, 0, 0);
 sf::Color background_color = sf::Color(152, 147, 218);
 sf::Vector2f win_size = {1500, 1000};
 sf::String lambda(L"\u03BB");
+long animation_time = 1500;
 
 int main() {
     TuringMachine machine;

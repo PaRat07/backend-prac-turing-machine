@@ -31,8 +31,6 @@ public:
 
     void MoveLeft();
 
-    // ms
-    static long animation_time;
 private:
     TuringMachine &machine_;
     mutable float pos_in_ = 0;

@@ -12,3 +12,4 @@ extern sf::Font font;
 extern float letter_size;
 extern sf::Vector2f win_size;
 extern sf::String lambda;
+extern long animation_time;

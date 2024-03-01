@@ -23,7 +23,6 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     static float move_for;
-    static long animation_time;
 private:
     float y_pos_;
     mutable std::optional<Animation> animation_;

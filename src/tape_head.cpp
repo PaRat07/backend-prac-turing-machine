@@ -1,7 +1,6 @@
 #include "../elements/tape_head.h"
 
-float TapeHead::move_for = 25.;
-long TapeHead::animation_time = 1500;
+float TapeHead::move_for = 50.;
 
 TapeHead::TapeHead(float y_pos)
         : y_pos_(y_pos)
