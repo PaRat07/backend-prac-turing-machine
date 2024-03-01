@@ -40,5 +40,6 @@ private:
     std::optional<int> active_pos_;
     mutable std::optional<Animation> animation_;
 
-    static double CalcPercentage(double done);
+    static double CalcPercentage(double time);
+    static double CalcPosTapeHead(double time);
 };

@@ -1,7 +1,7 @@
 #include "../elements/tape_head.h"
 
-float TapeHead::move_for = 15.;
-long TapeHead::animation_time = 500;
+float TapeHead::move_for = 25.;
+long TapeHead::animation_time = 1500;
 
 TapeHead::TapeHead(float y_pos)
         : y_pos_(y_pos)
@@ -21,7 +21,7 @@ void TapeHead::ProcessEvent(sf::Event event) {
 
 void TapeHead::MoveRight() {
     if (!animation_.has_value()) {
-        animation_ = {-1,
+        animation_ = {1,
                       std::chrono::steady_clock::now(),
                       std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
         };
@@ -30,7 +30,7 @@ void TapeHead::MoveRight() {
 
 void TapeHead::MoveLeft() {
     if (!animation_.has_value()) {
-        animation_ = {1,
+        animation_ = {-1,
                       std::chrono::steady_clock::now(),
                       std::chrono::steady_clock::now() + std::chrono::milliseconds(animation_time)
         };
@@ -61,5 +61,14 @@ void TapeHead::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 double TapeHead::CalcPos(double time) {
-    return std::sin(time * M_PI);
+    time *= 4;
+    if (time < 1) {
+        return time / 3;
+    }
+    --time;
+    if (time < 2) {
+        return 1. / 3;
+    }
+    time -= 2;
+    return (1 - time) / 3;
 }

@@ -93,8 +93,29 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     }
 }
 
-double Tape::CalcPercentage(double done) {
-    return std::cos(M_PI_2 * done);
+
+double Tape::CalcPosTapeHead(double time) {
+    time *= 4;
+    if (time < 1) {
+        return time / 3;
+    }
+    --time;
+    if (time < 2) {
+        return 1. / 3;
+    }
+    time -= 2;
+    return (1 - time) / 3;
+}
+
+double Tape::CalcPercentage(double time) {
+    time *= 4.;
+    if (time < 1.) {
+        return time * time / 6. - CalcPosTapeHead(time / 4) * 0.25;
+    }
+    if (time < 3.) {
+        return (time - 0.5) / 3. - CalcPosTapeHead(time / 4) * 0.25;
+    }
+    return 1. - std::pow(4. - time, 2.) / 6. - CalcPosTapeHead(time / 4) * 0.25;
 }
 
 void Tape::MoveRight() {
@@ -115,4 +136,4 @@ void Tape::MoveLeft() {
     }
 }
 
-long Tape::animation_time = 500;
+long Tape::animation_time = 1500;
