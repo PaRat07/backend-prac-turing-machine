@@ -9,11 +9,11 @@ Table::Table(sf::Vector2f pos, sf::Vector2f size, sf::Vector2f win_size, TuringM
 {}
 
 void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::Vector2i real_size(size_.x * target.getSize().x, size_.y * target.getSize().y);
+    sf::Vector2i real_size(size_.x * win_size.x, size_.y * win_size.y);
 
     {
         sf::RoundedRectangleShape frame{sf::Vector2f(real_size.x - 4, real_size.y - 4)};
-        frame.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 2, pos_.y * target.getSize().y + 2));
+        frame.setPosition(sf::Vector2f(pos_.x * win_size.x + 2, pos_.y * win_size.y + 2));
         frame.setRoundRadius(10);
         frame.setFillColor(background_color);
         frame.setOutlineThickness(2);
@@ -58,7 +58,7 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         }
         net_texture.display();
         net_sprite.setTexture(net_texture.getTexture());
-        net_sprite.setPosition(cell_size.x * 2 + 12, cell_size.y * 2 + 12);
+        net_sprite.setPosition(cell_size.x * 2 + 12 + pos_.x * win_size.x, cell_size.y * 2 + 12 + pos_.y * win_size.y);
         target.draw(net_sprite);
     }
 
@@ -95,7 +95,7 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         }
         qs.display();
         sf::Sprite sprite;
-        sprite.setPosition(12,  cell_size.y * 2 + 12);
+        sprite.setPosition(12 + pos_.x * win_size.x,  cell_size.y * 2 + 12 + pos_.y * win_size.y);
         sprite.setTexture(qs.getTexture());
         target.draw(sprite);
     }
@@ -133,7 +133,7 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         }
         syms.display();
         sf::Sprite sprite;
-        sprite.setPosition(cell_size.x * 2 + 12, 12);
+        sprite.setPosition(cell_size.x * 2 + 12 + pos_.x * win_size.x, 12 + pos_.y * win_size.y);
         sprite.setTexture(syms.getTexture());
         target.draw(sprite);
     }
@@ -143,7 +143,7 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         sf::RectangleShape legend_border(sf::Vector2f(std::min(real_size.x - 24, machine_.Size().x * cell_size.x), 2));
         legend_border.setFillColor(outline_color);
         target.draw(legend_border);
-        legend_border.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 12, pos_.y * target.getSize().y + 12 + cell_size.y * 2));
+        legend_border.setPosition(sf::Vector2f(pos_.x * win_size.x + 12, pos_.y * win_size.y + 12 + cell_size.y * 2));
         target.draw(legend_border);
     }
 
@@ -152,14 +152,14 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         sf::RectangleShape legend_border(sf::Vector2f(2, std::min(real_size.y - 24, machine_.Size().y * cell_size.y)));
         legend_border.setFillColor(outline_color);
         target.draw(legend_border);
-        legend_border.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 12 + cell_size.x * 2, pos_.y * target.getSize().y + 12));
+        legend_border.setPosition(sf::Vector2f(pos_.x * win_size.x + 12 + cell_size.x * 2, pos_.y * win_size.y + 12));
         target.draw(legend_border);
     }
 
     // frame
     {
         sf::RectangleShape table_border(sf::Vector2f(std::min(real_size.x - 24, (machine_.Size().x + 2) * cell_size.x - 2), std::min(real_size.y - 24, (machine_.Size().y + 2) * cell_size.y - 2)));
-        table_border.setPosition(sf::Vector2f(pos_.x * target.getSize().x + 14, pos_.y * target.getSize().y + 14));
+        table_border.setPosition(sf::Vector2f(pos_.x * win_size.x + 14, pos_.y * win_size.y + 14));
         table_border.setFillColor(sf::Color::Transparent);
         table_border.setOutlineThickness(2);
         table_border.setOutlineColor(outline_color);

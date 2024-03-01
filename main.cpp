@@ -25,13 +25,6 @@ int main() {
     }
 
     WindowManager wm;
-    {
-        Window win_table;
-        win_table.AddElement(
-                std::make_unique<Table>(sf::Vector2f(0, 0), sf::Vector2f(800, 800), sf::Vector2f(1000, 1000), machine));
-
-        wm.AddWindow(std::move(win_table));
-    }
 
     {
         Window win_tape;
@@ -39,6 +32,13 @@ int main() {
         win_tape.AddElement(std::make_unique<TapeHead>(160));
 
         wm.AddWindow(std::move(win_tape));
+    }
+
+    {
+        Window win_table;
+        win_table.AddElement(std::make_unique<Table>(sf::Vector2f(10, 10), sf::Vector2f(800, 980), sf::Vector2f(1000, 1000), machine));
+
+        wm.AddWindow(std::move(win_table));
     }
 
     wm.Start();
