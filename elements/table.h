@@ -19,7 +19,7 @@ class Table : public AbstractElement {
 public:
     static sf::Vector2i cell_size;
 
-    Table(sf::Vector2f pos, sf::Vector2f size, sf::Vector2f win_size, TuringMachine &machine);
+    Table(sf::Vector2f pos, sf::Vector2f size, TuringMachine &machine);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

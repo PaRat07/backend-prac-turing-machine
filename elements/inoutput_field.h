@@ -79,17 +79,17 @@ void InputField<BackgroundShape>::ProcessEvent(sf::Event event) {
 
 template<class BackgroundShape>
 void InputField<BackgroundShape>::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    BackgroundShape rect(sf::Vector2f(size_.x * win_size.x, size_.y * win_size.y));
-    rect.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y));
+    sf::Vector2f real_size(size_.x * win_size.x, size_.y * win_size.y), real_pos(pos_.x * win_size.x, pos_.y * win_size.y);
+    BackgroundShape rect(real_size);
+    rect.setPosition(real_pos);
     rect.setOutlineColor(outline_color);
-//    rect.setRoundRadius(10.f);
     rect.setFillColor(fill_color);
     rect.setOutlineThickness(2);
     target.draw(rect);
 
     CenterPositionedString text;
     text.setString(data_);
-    text.setPosition(sf::Vector2f(pos_.x * win_size.x + size_.x * win_size.x / 2, pos_.y * win_size.y + size_.y * win_size.y - letter_size * 0.75f));
+    text.setPosition(sf::Vector2f(real_pos.x + real_size.x / 2, real_pos.y + real_size.y - letter_size * 0.75f));
     target.draw(text);
 }
 

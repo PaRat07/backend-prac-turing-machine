@@ -26,7 +26,7 @@ void OutputField::draw(sf::RenderTarget &target, sf::RenderStates states) const 
     text.setFont(font);
     text.setString(data_);
     text.setCharacterSize(letter_size);
-    text.setPosition(sf::Vector2f(pos_.x, pos_.y + size_.y / 2.f - letter_size * 0.75f));
+    text.setPosition(sf::Vector2f(pos_.x, pos_.y + size_.y / 2));
     text.setFillColor(text_color);
     target.draw(text);
 }

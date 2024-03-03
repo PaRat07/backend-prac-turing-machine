@@ -38,7 +38,8 @@ ButtonWithImage::ButtonWithImage(sf::Vector2f pos, sf::Vector2f sz, std::string 
 
 void ButtonWithTextRelativePos::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::Vector2f real_pos(pos_.x * win_size.x, pos_.y * win_size.y);
-    RoundedRectangleShape<5> rect(size_);
+    sf::Vector2f real_size(size_.x * win_size.x, size_.y * win_size.y);
+    RoundedRectangleShape<5> rect(real_size);
     rect.setOutlineColor(outline_color);
     rect.setFillColor(fill_color);
     rect.setPosition(real_pos);
@@ -47,7 +48,7 @@ void ButtonWithTextRelativePos::draw(sf::RenderTarget &target, sf::RenderStates 
 
     CenterPositionedString str;
     str.setString(text_);
-    str.setPosition(sf::Vector2f(real_pos.x + size_.x / 2, real_pos.y + size_.y / 2));
+    str.setPosition(sf::Vector2f(real_pos.x + real_size.x / 2, real_pos.y + real_size.y / 2));
     target.draw(str);
 }
 
@@ -63,8 +64,8 @@ void ButtonWithTextRelativePos::ProcessEvent(sf::Event event) {
 
 ButtonWithTextRelativePos::ButtonWithTextRelativePos(sf::Vector2f pos, sf::Vector2f sz, std::string text, const std::function<void()> &cb)
         : callback_(cb)
-        , size_(sz.x, sz.y)
-        , pos_((pos.x - sz.x / 2) / win_size.x, (pos.y - sz.y / 2) / win_size.y)
+        , size_(sz.x / win_size.x, sz.y / win_size.y)
+        , pos_(pos.x / win_size.x, pos.y / win_size.y)
         , text_(std::move(text))
 {}
 

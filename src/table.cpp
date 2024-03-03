@@ -2,7 +2,7 @@
 
 sf::Vector2i Table::cell_size = { 90, 40 };
 
-Table::Table(sf::Vector2f pos, sf::Vector2f size, sf::Vector2f win_size, TuringMachine &machine)
+Table::Table(sf::Vector2f pos, sf::Vector2f size, TuringMachine &machine)
         : machine_(machine)
         , pos_(pos.x / win_size.x, pos.y / win_size.y)
         , size_(size.x / win_size.x, size.y / win_size.y)
