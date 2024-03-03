@@ -4,6 +4,7 @@
 #include "app/general_data.h"
 #include "elements/tape.h"
 #include "elements/tape_head.h"
+#include "elements/rounded_rectangle.h"
 
 sf::Font font = LoadFont("../app/3270NerdFontMono-Regular.ttf");
 float letter_size = 20.f;
@@ -52,7 +53,9 @@ int main() {
     {
         Window win_table;
         win_table.AddElement(std::make_unique<Table>(sf::Vector2f(10, 10), sf::Vector2f(800, 980), sf::Vector2f(1000, 1000), machine));
-        win_table.AddElement(std::make_unique<InputField>(sf::Vector2f(810, 10), sf::Vector2f(190, 30)));
+
+        std::unique_ptr<InputField<RoundedRectangleShape<10>>> ptr = std::make_unique<InputField<RoundedRectangleShape<10>>>(sf::Vector2f(820, 10), sf::Vector2f(170, 30));
+        win_table.AddElement(std::move(ptr));
 
         wm.AddWindow(std::move(win_table));
     }

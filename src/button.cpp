@@ -1,12 +1,11 @@
 #include "../elements/button.h"
 
 void ButtonWithImage::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::RoundedRectangleShape rect(size_);
+    RoundedRectangleShape<5> rect(size_);
     rect.setPosition(pos_);
     rect.setOutlineColor(outline_color);
     rect.setFillColor(fill_color);
     rect.setPosition(pos_);
-    rect.setRoundRadius(5.f);
     target.draw(rect);
 
 
@@ -39,11 +38,10 @@ ButtonWithImage::ButtonWithImage(sf::Vector2f pos, sf::Vector2f sz, std::string 
 
 void ButtonWithTextRelativePos::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::Vector2f real_pos(pos_.x * win_size.x, pos_.y * win_size.y);
-    sf::RoundedRectangleShape rect(size_);
+    RoundedRectangleShape<5> rect(size_);
     rect.setOutlineColor(outline_color);
     rect.setFillColor(fill_color);
     rect.setPosition(real_pos);
-    rect.setRoundRadius(5.f);
     target.draw(rect);
 
 
@@ -71,11 +69,10 @@ ButtonWithTextRelativePos::ButtonWithTextRelativePos(sf::Vector2f pos, sf::Vecto
 {}
 
 void ButtonWithTextAbsPos::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::RoundedRectangleShape rect(size_);
+    RoundedRectangleShape<5> rect(size_);
     rect.setOutlineColor(outline_color);
     rect.setFillColor(fill_color);
     rect.setPosition(pos_);
-    rect.setRoundRadius(5.f);
     target.draw(rect);
 
 

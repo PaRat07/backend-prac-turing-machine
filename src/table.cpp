@@ -12,9 +12,8 @@ void Table::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::Vector2i real_size(size_.x * win_size.x, size_.y * win_size.y);
 
     {
-        sf::RoundedRectangleShape frame{sf::Vector2f(real_size.x - 4, real_size.y - 4)};
+        RoundedRectangleShape<10> frame{sf::Vector2f(real_size.x - 4, real_size.y - 4)};
         frame.setPosition(sf::Vector2f(pos_.x * win_size.x + 2, pos_.y * win_size.y + 2));
-        frame.setRoundRadius(10);
         frame.setFillColor(background_color);
         frame.setOutlineThickness(2);
         target.draw(frame);

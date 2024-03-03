@@ -15,10 +15,9 @@ void OutputField::ProcessEvent(sf::Event event) {
 }
 
 void OutputField::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::RoundedRectangleShape rect(sf::Vector2f(size_.x * win_size.x, size_.y * win_size.y));
+    RoundedRectangleShape<10> rect(sf::Vector2f(size_.x * win_size.x, size_.y * win_size.y));
     rect.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y));
     rect.setOutlineColor(outline_color);
-    rect.setRoundRadius(5.f);
     rect.setFillColor(fill_color);
     rect.setOutlineThickness(2);
     target.draw(rect);

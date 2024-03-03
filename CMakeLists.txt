@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
 project(prac-turing-machine)
 
+set(CMAKE_CXX_STANDARD 20)
+
 include(FetchContent)
 FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -17,7 +19,6 @@ add_executable(prac
         src/center_positioned_string.cpp
         src/general_data.cpp
         src/inoutput_field.cpp
-        src/rounded_rectangle.cpp
         src/window_manager.cpp
         elements/tape_head.h
         src/tape_head.cpp)
