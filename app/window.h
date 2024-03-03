@@ -26,6 +26,7 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void ProcessEvent(sf::Event event);
+
 private:
     std::vector<std::unique_ptr<AbstractElement>> elements_;
 };

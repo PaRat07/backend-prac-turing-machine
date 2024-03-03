@@ -39,7 +39,7 @@ private:
 
 class ButtonWithTextAbsPos : public AbstractElement {
 public:
-    ButtonWithTextAbsPos(sf::Vector2f pos, sf::Vector2f sz, std::string text, const std::function<void()> &cb);
+    ButtonWithTextAbsPos(sf::Vector2f pos, sf::Vector2f sz, std::string text, std::function<void()> cb);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

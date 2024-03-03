@@ -40,9 +40,9 @@ private:
 
 class OutputField : public AbstractElement {
 public:
-    OutputField(sf::Vector2f pos, sf::Vector2f size, const sf::RenderTarget &target);
+    OutputField(sf::Vector2f pos, sf::Vector2f size);
 
-    void ProcessEvent(sf::Event event, sf::RenderTarget &target);
+    void ProcessEvent(sf::Event event) override;
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

@@ -17,19 +17,34 @@ long animation_time = 1500;
 
 int main() {
     TuringMachine machine;
-
-    char sym = '0';
-    for (int i = 0; i < 52; ++i) {
-        machine.AddColumn(++sym);
-        machine.AddLine();
-    }
+    machine.AddColumn(lambda[0]);
+    machine.AddColumn('a');
+    machine.AddColumn('b');
+    machine.AddLine();
+    machine.AddLine();
+    machine.AddLine();
 
     WindowManager wm;
 
     {
         Window win_tape;
-        win_tape.AddElement(std::make_unique<Tape>(machine, 100));
-        win_tape.AddElement(std::make_unique<TapeHead>(160));
+        std::unique_ptr<Tape> tape = std::make_unique<Tape>(machine, 100);
+        std::unique_ptr<TapeHead> tape_head = std::make_unique<TapeHead>(160);
+        auto cb_move_l = [&tape_ref = *tape, &tape_head_ref = *tape] () {
+            tape_ref.MoveLeft();
+            tape_head_ref.MoveLeft();
+        };
+        auto cb_move_r = [&tape_ref = *tape, &tape_head_ref = *tape_head] () {
+            tape_ref.MoveRight();
+            tape_head_ref.MoveRight();
+        };
+        machine.SetCallBacks(cb_move_r, cb_move_l);
+        win_tape.AddElement(std::move(tape));
+        win_tape.AddElement(std::move(tape_head));
+
+        std::unique_ptr<ButtonWithTextRelativePos> next_step = std::make_unique<ButtonWithTextRelativePos>(sf::Vector2f(200, 300), sf::Vector2f(100, 50),
+                                                                                                      "Next step", [&machine] () { machine.Do1Tick(); });
+        win_tape.AddElement(std::move(next_step));
 
         wm.AddWindow(std::move(win_tape));
     }
@@ -37,6 +52,7 @@ int main() {
     {
         Window win_table;
         win_table.AddElement(std::make_unique<Table>(sf::Vector2f(10, 10), sf::Vector2f(800, 980), sf::Vector2f(1000, 1000), machine));
+        win_table.AddElement(std::make_unique<InputField>(sf::Vector2f(810, 10), sf::Vector2f(190, 30)));
 
         wm.AddWindow(std::move(win_table));
     }

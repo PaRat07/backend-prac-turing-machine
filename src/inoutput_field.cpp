@@ -2,23 +2,23 @@
 
 
 
-OutputField::OutputField(sf::Vector2f pos, sf::Vector2f size, const sf::RenderTarget &target)
-    : pos_(pos.x / target.getSize().x, pos.y / target.getSize().y)
-    , size_(size.x / target.getSize().x, size.y / target.getSize().y)
+OutputField::OutputField(sf::Vector2f pos, sf::Vector2f size)
+    : pos_(pos.x / win_size.x, pos.y / win_size.y)
+    , size_(size.x / win_size.x, size.y / win_size.y)
 {}
 
 
-void OutputField::ProcessEvent(sf::Event event, sf::RenderTarget &target) {
-    sf::Vector2f pos(event.touch.x / target.getSize().x, event.touch.y / target.getSize().y);
+void OutputField::ProcessEvent(sf::Event event) {
+    sf::Vector2f pos(event.touch.x / win_size.x, event.touch.y / win_size.y);
     active_ = std::abs(pos.x - (pos_.x + size_.x / 2)) <= size_.x / 2 &&
               std::abs(pos.y - (pos_.y + size_.y / 2)) <= size_.y / 2;
 }
 
 void OutputField::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    sf::RoundedRectangleShape rect(size_);
-    rect.setPosition(pos_);
+    sf::RoundedRectangleShape rect(sf::Vector2f(size_.x * win_size.x, size_.y * win_size.y));
+    rect.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y));
     rect.setOutlineColor(outline_color);
-    rect.setRoundRadius(10.f);
+    rect.setRoundRadius(5.f);
     rect.setFillColor(fill_color);
     rect.setOutlineThickness(2);
     target.draw(rect);
