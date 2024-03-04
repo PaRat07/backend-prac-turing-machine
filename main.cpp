@@ -24,8 +24,15 @@ int main() {
     machine.AddLine();
     machine.AddLine();
     machine.AddLine();
+    machine.SetTableValue(sf::Vector2i(1, 0), TuringMachine::ValueOfTable("ld,R,q1", 0));
+    machine.SetTableValue(sf::Vector2i(2, 0), TuringMachine::ValueOfTable("ld,R,q2", 0));
+    machine.SetTableValue(sf::Vector2i(1, 1), TuringMachine::ValueOfTable(",R,", 2));
+    machine.SetTableValue(sf::Vector2i(2, 1), TuringMachine::ValueOfTable(",R,", 2));
+    machine.SetTableValue(sf::Vector2i(1, 2), TuringMachine::ValueOfTable(",R,", 2));
+    machine.SetTableValue(sf::Vector2i(2, 2), TuringMachine::ValueOfTable(",R,", 2));
+    machine.SetTableValue(sf::Vector2i(0, 1), TuringMachine::ValueOfTable("a,,", 1));
+    machine.SetTableValue(sf::Vector2i(0, 2), TuringMachine::ValueOfTable("a,,", 2));
 
-    Window win_tape;
     std::atomic_bool need_draw = false;
     std::atomic_bool works = true;
 
@@ -38,6 +45,8 @@ int main() {
             }
         }
     });
+
+    Window win_tape;
 
     {
         {
@@ -75,6 +84,10 @@ int main() {
         win_tape.AddElement(std::make_unique<ButtonWithTextRelativePos>(
                 sf::Vector2f(10, 550), sf::Vector2f(100, 50),
                 "Pause", [&] () { need_draw.store(false); need_draw.notify_one(); }));
+
+        win_tape.AddElement(std::make_unique<ButtonWithTextRelativePos>(
+                sf::Vector2f(10, 600), sf::Vector2f(100, 50),
+                "Reset", [&machine] () { machine.Reset(); }));
     }
 
 
@@ -97,7 +110,7 @@ int main() {
         win_table.AddElement(std::make_unique<ButtonWithTextRelativePos>(sf::Vector2f(910, 60),
                                                                          sf::Vector2f(80, 40),
                                                                          "Add Q",
-                                                                         std::bind(&TuringMachine::AddLine, &machine)));
+                                                                         [&machine] () { machine.AddLine(); }));
         win_table.AddElement(std::move(scan));
     }
 

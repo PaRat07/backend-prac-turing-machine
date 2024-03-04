@@ -77,6 +77,7 @@ public:
     }
 
     void Write(int pos, sf::String sym) {
+        reserved_tape_.reset();
         if (sym == lambda) {
             tape_.erase(pos);
         } else {
@@ -85,10 +86,12 @@ public:
     }
 
     void SetTableValue(sf::Vector2i pos, ValueOfTable val) {
+        reserved_tape_.reset();
         table_[pos.x][pos.y] = val;
     }
 
     void AddLine() {
+        reserved_tape_.reset();
         qs_.push_back(qs_.size());
         for (int i = 0; i < table_size_.x; ++i) {
             table_[i].emplace_back(table_size_.y);
@@ -97,6 +100,7 @@ public:
     }
 
     void AddColumn(sf::Uint32 sym) {
+        reserved_tape_.reset();
         syms_ += sym;
         table_.emplace_back(table_size_.y, 0);
         int cur_q = 0;
@@ -131,6 +135,7 @@ public:
     }
 
     void EraseQ(std::string q) {
+        reserved_tape_.reset();
         int to_del = std::stoi(q.substr(1));
         size_t ind = std::find(qs_.begin(), qs_.end(), to_del) - qs_.begin();
         if (ind == qs_.size()) return;
@@ -141,6 +146,7 @@ public:
     }
 
     void EraseSym(char to_del) {
+        reserved_tape_.reset();
         size_t ind = syms_.find(to_del);
         if (ind == std::string::npos) return;
 
@@ -158,8 +164,12 @@ public:
     }
 
     void Do1Tick() {
-        const ValueOfTable &val = table_[syms_.find(Read(cur_pos_in_tape))][cur_q_];
-        if (val.to_write) {
+        if (!reserved_tape_.has_value()) {
+            reserved_tape_ = tape_;
+        }
+
+        ValueOfTable val = table_[syms_.find(Read(cur_pos_in_tape))][cur_q_];
+        if (val.to_write.has_value()) {
             tape_[cur_pos_in_tape] = *val.to_write;
         }
 
@@ -174,6 +184,12 @@ public:
         cur_q_ = val.q;
     }
 
+    void Reset() {
+        if (reserved_tape_.has_value()) {
+            tape_ = *reserved_tape_;
+        }
+    }
+
 private:
     // table_[x][y], x - sym, y - q
     int cur_pos_in_tape = 0;
@@ -184,4 +200,5 @@ private:
     std::vector<int> qs_;
     std::map<int, sf::String> tape_;
     std::vector<std::vector<ValueOfTable>> table_;
+    std::optional<std::map<int, sf::String>> reserved_tape_;
 };
