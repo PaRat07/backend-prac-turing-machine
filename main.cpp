@@ -26,6 +26,19 @@ int main() {
     machine.AddLine();
 
     Window win_tape;
+    std::atomic_bool need_draw = false;
+    std::atomic_bool works = true;
+
+    auto goer = std::async([&need_draw, &machine, &works] () {
+        while (works.load()) {
+            need_draw.wait(false);
+            while (need_draw.load() && works.load()) {
+                machine.Do1Tick();
+                std::this_thread::sleep_for(std::chrono::milliseconds(animation_time));
+            }
+        }
+    });
+
     {
         {
             std::unique_ptr<Tape> tape = std::make_unique<Tape>(machine, 100);
@@ -54,6 +67,14 @@ int main() {
         win_tape.AddElement(std::make_unique<ButtonWithTextRelativePos>(
                 sf::Vector2f(10, 450), sf::Vector2f(100, 50),
                 "+", [&] () { animation_time -= 100; animation_time = std::max(animation_time, 0l); }));
+
+        win_tape.AddElement(std::make_unique<ButtonWithTextRelativePos>(
+                sf::Vector2f(10, 500), sf::Vector2f(100, 50),
+                "Play", [&] () { need_draw.store(true); need_draw.notify_one(); }));
+
+        win_tape.AddElement(std::make_unique<ButtonWithTextRelativePos>(
+                sf::Vector2f(10, 550), sf::Vector2f(100, 50),
+                "Pause", [&] () { need_draw.store(false); need_draw.notify_one(); }));
     }
 
 
@@ -86,4 +107,6 @@ int main() {
     wm.AddWindow(std::move(win_tape));
 
     wm.Start();
+    need_draw.store(true); need_draw.notify_one();
+    works.store(false);
 }

@@ -12,7 +12,8 @@ void Tape::ProcessEvent(sf::Event event) {
     switch (event.type) {
         case sf::Event::MouseButtonPressed: {
             if (std::abs(y_pos_ + cell_size.y / 2 - event.mouseButton.y) < cell_size.y / 2) {
-                active_pos_ = (event.mouseButton.x - (pos_in_ + win_size.x / 2) - cell_size.x / 2) / cell_size.x;
+                float pos = event.mouseButton.x - win_size.x / 2. - pos_in_;
+                active_pos_ = (pos + (pos > 0 ? cell_size.x / 2 : - cell_size.x / 2)) / cell_size.x;
             } else {
                 active_pos_.reset();
             }
