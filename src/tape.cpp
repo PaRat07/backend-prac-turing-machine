@@ -24,7 +24,7 @@ void Tape::ProcessEvent(sf::Event event) {
                 if (event.text.unicode == 8) {
                     machine_.Write(*active_pos_, lambda);
                     --*active_pos_;
-                } else {
+                } else if (machine_.CorrSym(event.text.unicode)) {
                     machine_.Write(*active_pos_, event.text.unicode);
                     ++*active_pos_;
                 }

@@ -223,7 +223,10 @@ void Table::ProcessEvent(sf::Event event) {
         case sf::Event::TextEntered:
             if (field.has_value()) {
                 if (event.text.unicode == 13) {
-                    machine_.SetTableValue(*active_pos_, TuringMachine::ValueOfTable(field->GetText(), active_pos_->y));
+                    try {
+                        machine_.SetTableValue(*active_pos_,
+                                               TuringMachine::ValueOfTable(field->GetText(), active_pos_->y));
+                    } catch (...) { }
                 }
                 else {
                     field->ProcessEvent(event);

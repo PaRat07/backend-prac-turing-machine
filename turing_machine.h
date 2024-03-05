@@ -193,7 +193,7 @@ public:
     }
 
     void Do1Tick() {
-        if (ended_) return;
+        if (ended_ || !CanDoTick()) return;
         if (!reserved_tape_.has_value()) {
             reserved_tape_ = tape_;
         }
@@ -217,6 +217,10 @@ public:
         }
     }
 
+    bool CorrSym(sf::Uint32 sym) const {
+        return syms_.find(sym) != std::string::npos;
+    }
+
     void Reset() {
         if (reserved_tape_.has_value()) {
             tape_ = *reserved_tape_;
@@ -235,4 +239,12 @@ private:
     std::vector<std::vector<ValueOfTable>> table_;
     std::optional<std::map<int, sf::String>> reserved_tape_;
     bool ended_ = false;
+
+    bool CanDoTick() const {
+        return std::any_of(table_.begin(), table_.end(), [] (const std::vector<ValueOfTable> &v) {
+            return std::any_of(v.begin(), v.end(), [] (const ValueOfTable &val) {
+                return val.term;
+            });
+        });
+    }
 };
