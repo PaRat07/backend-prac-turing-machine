@@ -30,8 +30,8 @@ int main() {
     machine.SetTableValue(sf::Vector2i(2, 1), TuringMachine::ValueOfTable(",R,", 2));
     machine.SetTableValue(sf::Vector2i(1, 2), TuringMachine::ValueOfTable(",R,", 2));
     machine.SetTableValue(sf::Vector2i(2, 2), TuringMachine::ValueOfTable(",R,", 2));
-    machine.SetTableValue(sf::Vector2i(0, 1), TuringMachine::ValueOfTable("a,,", 1));
-    machine.SetTableValue(sf::Vector2i(0, 2), TuringMachine::ValueOfTable("a,,", 2));
+    machine.SetTableValue(sf::Vector2i(0, 1), TuringMachine::ValueOfTable("a,!,", 1));
+    machine.SetTableValue(sf::Vector2i(0, 2), TuringMachine::ValueOfTable("b,!,", 2));
 
     std::atomic_bool need_draw = false;
     std::atomic_bool works = true;
@@ -41,7 +41,7 @@ int main() {
             need_draw.wait(false);
             while (need_draw.load() && works.load()) {
                 machine.Do1Tick();
-                std::this_thread::sleep_for(std::chrono::milliseconds(animation_time));
+                std::this_thread::sleep_for(std::chrono::milliseconds(animation_time + 199));
             }
         }
     });
@@ -120,6 +120,7 @@ int main() {
     wm.AddWindow(std::move(win_tape));
 
     wm.Start();
-    need_draw.store(true); need_draw.notify_one();
     works.store(false);
+    need_draw.store(true);
+    need_draw.notify_one();
 }
