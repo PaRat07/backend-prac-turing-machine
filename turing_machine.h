@@ -119,6 +119,7 @@ public:
         ended_ = false;
         reserved_tape_.reset();
         qs_.push_back(qs_.size());
+        std::lock_guard guard(change_table_);
         for (int i = 0; i < table_size_.x; ++i) {
             table_[i].emplace_back(table_size_.y);
         }
@@ -131,6 +132,7 @@ public:
         syms_ += sym;
         table_.emplace_back(table_size_.y, 0);
         int cur_q = 0;
+        std::lock_guard guard(change_table_);
         std::for_each(table_.back().begin(), table_.back().end(), [&cur_q] (ValueOfTable &val) {
             val = ValueOfTable(++cur_q);
         });
@@ -142,6 +144,7 @@ public:
     }
 
     std::vector<std::string> GetSyms() const {
+        std::lock_guard guard(change_table_);
         std::vector<std::string> ans(syms_.getSize());
         std::transform(syms_.begin(), syms_.end(), ans.begin(), [] (sf::Uint32 sym) {
             return sf::String(sym);
@@ -150,6 +153,7 @@ public:
     }
 
     std::vector<std::string> GetQs() const {
+        std::lock_guard guard(change_table_);
         std::vector<std::string> ans(qs_.size());
         std::transform(qs_.begin(), qs_.end(), ans.begin(), [] (int q) {
             return "q" + std::to_string(q);
@@ -167,6 +171,7 @@ public:
         int to_del = std::stoi(q.substr(1));
         size_t ind = std::find(qs_.begin(), qs_.end(), to_del) - qs_.begin();
         if (ind == qs_.size()) return;
+        std::lock_guard guard(change_table_);
         qs_.erase(qs_.begin() + ind);
         std::for_each(table_.begin(), table_.end(), [ind] (std::vector<ValueOfTable> &v) {
             v.erase(v.begin() + ind);
@@ -179,6 +184,7 @@ public:
         size_t ind = syms_.find(to_del);
         if (ind == std::string::npos) return;
 
+        std::lock_guard guard(change_table_);
         syms_.erase(ind);
         table_.erase(table_.begin() + ind);
     }
@@ -238,6 +244,7 @@ private:
     std::map<int, sf::String> tape_;
     std::vector<std::vector<ValueOfTable>> table_;
     std::optional<std::map<int, sf::String>> reserved_tape_;
+    mutable std::mutex change_table_;
     bool ended_ = false;
 
     bool CanDoTick() const {

@@ -237,5 +237,5 @@ void Table::ProcessEvent(sf::Event event) {
 }
 
 sf::Vector2i Table::GetTableSize() const {
-    return { cell_size.x * (machine_.Size().x + 1),cell_size.y * (machine_.Size().y + 1) };
+    return { cell_size.x * (machine_.Size().x + 2),cell_size.y * (machine_.Size().y + 1) };
 }
