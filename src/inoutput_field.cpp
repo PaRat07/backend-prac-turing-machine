@@ -17,8 +17,8 @@ void OutputField::ProcessEvent(sf::Event event) {
 void OutputField::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     RoundedRectangleShape<10> rect(sf::Vector2f(size_.x * win_size.x, size_.y * win_size.y));
     rect.setPosition(sf::Vector2f(pos_.x * win_size.x, pos_.y * win_size.y));
-    rect.setOutlineColor(outline_color);
-    rect.setFillColor(fill_color);
+    rect.setOutlineThickness(0);
+    rect.setFillColor(primary_color);
     rect.setOutlineThickness(2);
     target.draw(rect);
 
@@ -27,7 +27,7 @@ void OutputField::draw(sf::RenderTarget &target, sf::RenderStates states) const 
     text.setString(data_);
     text.setCharacterSize(letter_size);
     text.setPosition(sf::Vector2f(pos_.x, pos_.y + size_.y / 2));
-    text.setFillColor(text_color);
+    text.setFillColor(on_primary_color);
     target.draw(text);
 }
 

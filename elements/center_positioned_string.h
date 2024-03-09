@@ -15,8 +15,12 @@ class CenterPositionedString : public sf::Drawable {
     void setBackground(sf::Color color);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    void setTextColor(sf::Color color) {
+        text_color_ = color;
+    }
  private:
-    sf::Color background_color_ = text_color;
+    sf::Color text_color_ = on_primary_container_color;
     sf::String data_;
     sf::Vector2f pos_ = { 0, 0 };
 };

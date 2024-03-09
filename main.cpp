@@ -6,32 +6,38 @@
 #include "elements/tape_head.h"
 #include "elements/rounded_rectangle.h"
 
-sf::Font font = LoadFont("../app/3270NerdFontMono-Regular.ttf");
+sf::Font font = LoadFont("../app/Roboto-Regular.ttf");
 float letter_size = 20.f;
-sf::Color fill_color = sf::Color(187, 189, 246);
-sf::Color outline_color = sf::Color(114, 114, 126);
-sf::Color text_color = sf::Color(0, 0, 0);
-sf::Color background_color = sf::Color(152, 147, 218);
+sf::Color background_color = sf::Color(21, 18, 24);
+sf::Color primary_color = sf::Color(210, 188, 253);
+sf::Color on_primary_color = sf::Color(56, 38, 92);
+sf::Color primary_container_color = sf::Color(79, 61, 116);
+sf::Color on_primary_container_color = sf::Color(152, 147, 218);
+sf::Color outline_color = sf::Color(73, 69, 78);
+sf::Color surface_container = sf::Color(29, 27, 32);
+sf::Color on_surface_container = sf::Color(203, 196, 207);
+
+
 sf::Vector2f win_size = {1000, 1000};
-sf::String lambda(L"\u03BB");
+sf::Uint32 lambda(L'\u03BB');
 long animation_time = 1500;
 
 int main() {
     TuringMachine machine;
-    machine.AddColumn(lambda[0]);
+    machine.AddColumn(lambda);
     machine.AddColumn('a');
     machine.AddColumn('b');
     machine.AddLine();
     machine.AddLine();
     machine.AddLine();
-    machine.SetTableValue(sf::Vector2i(1, 0), TuringMachine::ValueOfTable("ld,R,q1", 0));
-    machine.SetTableValue(sf::Vector2i(2, 0), TuringMachine::ValueOfTable("ld,R,q2", 0));
-    machine.SetTableValue(sf::Vector2i(1, 1), TuringMachine::ValueOfTable(",R,", 2));
-    machine.SetTableValue(sf::Vector2i(2, 1), TuringMachine::ValueOfTable(",R,", 2));
-    machine.SetTableValue(sf::Vector2i(1, 2), TuringMachine::ValueOfTable(",R,", 2));
-    machine.SetTableValue(sf::Vector2i(2, 2), TuringMachine::ValueOfTable(",R,", 2));
-    machine.SetTableValue(sf::Vector2i(0, 1), TuringMachine::ValueOfTable("a,!,", 1));
-    machine.SetTableValue(sf::Vector2i(0, 2), TuringMachine::ValueOfTable("b,!,", 2));
+    machine.SetValue(sf::Vector2i(1, 0), "ld,R,q1");
+    machine.SetValue(sf::Vector2i(2, 0), "ld,R,q2");
+    machine.SetValue(sf::Vector2i(1, 1), ",R,");
+    machine.SetValue(sf::Vector2i(2, 1), ",R,");
+    machine.SetValue(sf::Vector2i(1, 2), ",R,");
+    machine.SetValue(sf::Vector2i(2, 2), ",R,");
+    machine.SetValue(sf::Vector2i(0, 1), "a,!,");
+    machine.SetValue(sf::Vector2i(0, 2), "b,!,");
 
     std::atomic_bool need_draw = false;
     std::atomic_bool works = true;
@@ -93,7 +99,7 @@ int main() {
 
     Window win_table;
     {
-        win_table.AddElement(std::make_unique<Table>(sf::Vector2f(10, 10), sf::Vector2f(800, 980), machine));
+        win_table.AddElement(std::make_unique<TableElement>(sf::Vector2f(10, 10), sf::Vector2f(800, 980), machine));
 
         std::unique_ptr<InputField<RoundedRectangleShape<10>>> scan = std::make_unique<InputField<RoundedRectangleShape<10>>>(sf::Vector2f(820, 10),
                                                                                                                               sf::Vector2f(170, 40));

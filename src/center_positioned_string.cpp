@@ -13,13 +13,13 @@ void CenterPositionedString::setString(sf::String s) {
 }
 
 void CenterPositionedString::setBackground(sf::Color color) {
-    background_color_ = color;
+    text_color_ = color;
 }
 
 void CenterPositionedString::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::Text val;
     val.setFont(font);
-    val.setFillColor(background_color_);
+    val.setFillColor(text_color_);
     val.setCharacterSize(letter_size);
     val.setString(data_);
     val.setPosition(pos_.x - val.getLocalBounds().width / 2, pos_.y - letter_size / 1.75f);

@@ -82,13 +82,14 @@ void InputField<BackgroundShape>::draw(sf::RenderTarget &target, sf::RenderState
     sf::Vector2f real_size(size_.x * win_size.x, size_.y * win_size.y), real_pos(pos_.x * win_size.x, pos_.y * win_size.y);
     BackgroundShape rect(real_size);
     rect.setPosition(real_pos);
-    rect.setOutlineColor(outline_color);
-    rect.setFillColor(fill_color);
+    rect.setOutlineThickness(0);
+    rect.setFillColor(primary_color);
     rect.setOutlineThickness(2);
     target.draw(rect);
 
     CenterPositionedString text;
     text.setString(data_);
+    text.setTextColor(on_primary_color);
     text.setPosition(sf::Vector2f(real_pos.x + real_size.x / 2, real_pos.y + real_size.y - letter_size * 0.75f));
     target.draw(text);
 }

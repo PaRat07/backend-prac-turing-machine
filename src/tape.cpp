@@ -94,7 +94,7 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     // active
     if (active_pos_.has_value()) {
         sf::RectangleShape rect((sf::Vector2f(cell_size.x - 2, cell_size.y - 2)));
-        rect.setFillColor(fill_color);
+        rect.setFillColor(primary_color);
         rect.setPosition(*active_pos_ * cell_size.x + (pos_in_ + win_size.x / 2) - cell_size.x / 2 + 2, y_pos_ + 2);
         target.draw(rect);
     }

@@ -6,77 +6,46 @@
 #include <functional>
 #include <optional>
 #include <thread>
+#include <set>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 
 #include "app/general_data.h"
+#include "elements/table.h"
 
-class TuringMachine {
+template<typename T>
+using ordered_set = __gnu_pbds::tree<T, __gnu_pbds::null_type, std::less<>, __gnu_pbds::rb_tree_tag, __gnu_pbds::tree_order_statistics_node_update>;
+
+class TuringMachine : public Table {
 public:
     struct ValueOfTable {
-        ValueOfTable(int cur_q)
-                : to_write(std::nullopt)
-                , move(Move::DONT_MOVE)
-                , q(cur_q)
-                , view(lambda + ",,q" + std::to_string(cur_q))
-                , term(false)
-        {
-        }
+        ValueOfTable();
 
-        ValueOfTable(std::string_view val, int q_val) {
-            if (val[0] != ',') {
-                if (val[0] == '!') {
-                    term = true;
-                    to_write = std::nullopt;
-                    move = Move::DONT_MOVE;
-                    view = "!";
-                    q = q_val;
-                    return;
-                } else if (val.substr(0, 2) == "ld") {
-                    to_write = lambda;
-                    val.remove_prefix(3);
-                } else {
-                    to_write = val[0];
-                    val.remove_prefix(2);
-                }
-            } else {
-                to_write = std::nullopt;
-                val.remove_prefix(1);
-            }
-            view += sf::String((to_write ? *to_write : "") + ',');
-
-            if (val[0] != ',') {
-                if (val[0] == '!') {
-                    term = true;
-                    view += "!";
-                    move = Move::DONT_MOVE;
-                    q = q_val;
-                    return;
-                }
-                view += val[0];
-                move = (val[0] == 'L' ? Move::MOVE_LEFT : Move::MOVE_RIGHT);
-                val.remove_prefix(2);
-            } else {
-                move = Move::DONT_MOVE;
-                val.remove_prefix(1);
-            }
-            view += ',';
-
-            if (!val.empty()) {
-                if (val[0] == '!') {
-                    term = true;
-                    q = q_val;
-                    return;
-                }
-                val.remove_prefix(1);
-                q = std::stoi(std::string(val));
-            } else {
-                q = q_val;
-            }
-            view += "q" + std::to_string(q);
-            term = false;
-        }
+        ValueOfTable(std::string_view val);
 
         sf::String ToStr() const {
-            return view;
+            sf::String ans;
+            if (to_write.has_value()) {
+                ans += *to_write;
+            }
+            ans += ",";
+            switch (move) {
+                case Move::MOVE_LEFT:
+                    ans += "L";
+                    break;
+                case Move::MOVE_RIGHT:
+                    ans += "R";
+                    break;
+            }
+            ans += ",";
+            if (q.has_value()) {
+                ans += "q" + std::to_string(*q);
+            }
+            if (term) {
+                ans += "!";
+            }
+            return ans;
         }
         enum class Move {
             DONT_MOVE = 0,
@@ -84,174 +53,57 @@ public:
             MOVE_RIGHT = 2
         };
 
-        std::optional<sf::String> to_write;
+        std::optional<sf::Uint32> to_write;
         Move move;
-        int q;
-        sf::String view;
+        std::optional<int> q;
         bool term;
     };
 
-    sf::String GetFrom(int pos, int len) {
-        sf::String ans;
-        for (int i = pos; i < pos + len; ++i) {
-            ans[i - pos] = Read(i)[0];
-        }
-        return ans;
-    }
+    sf::String GetFrom(int pos, int len);
 
-    void Write(int pos, sf::String sym) {
-        ended_ = false;
-        reserved_tape_.reset();
-        if (sym == lambda) {
-            tape_.erase(pos);
-        } else {
-            tape_[pos] = sym;
-        }
-    }
+    void Write(int pos, sf::Uint32 sym);
 
-    void SetTableValue(sf::Vector2i pos, ValueOfTable val) {
-        ended_ = false;
-        reserved_tape_.reset();
-        table_[pos.x][pos.y] = val;
-    }
+    void SetValue(sf::Vector2i pos, sf::String val) override;
 
-    void AddLine() {
-        ended_ = false;
-        reserved_tape_.reset();
-        qs_.push_back(qs_.size());
-        std::lock_guard guard(change_table_);
-        for (int i = 0; i < table_size_.x; ++i) {
-            table_[i].emplace_back(table_size_.y);
-        }
-        ++table_size_.y;
-    }
+    void AddLine();
 
-    void AddColumn(sf::Uint32 sym) {
-        ended_ = false;
-        reserved_tape_.reset();
-        syms_ += sym;
-        table_.emplace_back(table_size_.y, 0);
-        int cur_q = 0;
-        std::lock_guard guard(change_table_);
-        std::for_each(table_.back().begin(), table_.back().end(), [&cur_q] (ValueOfTable &val) {
-            val = ValueOfTable(++cur_q);
-        });
-        ++table_size_.x;
-    }
+    void AddColumn(sf::Uint32 sym);
 
-    const std::vector<std::vector<ValueOfTable>> &GetTable() const {
-        return table_;
-    }
+    sf::String GetValue(sf::Vector2i pos) const override;
 
-    std::vector<std::string> GetSyms() const {
-        std::lock_guard guard(change_table_);
-        std::vector<std::string> ans(syms_.getSize());
-        std::transform(syms_.begin(), syms_.end(), ans.begin(), [] (sf::Uint32 sym) {
-            return sf::String(sym);
-        });
-        return ans;
-    }
+    sf::Vector2i Size() const override;
 
-    std::vector<std::string> GetQs() const {
-        std::lock_guard guard(change_table_);
-        std::vector<std::string> ans(qs_.size());
-        std::transform(qs_.begin(), qs_.end(), ans.begin(), [] (int q) {
-            return "q" + std::to_string(q);
-        });
-        return ans;
-    }
+    void EraseLine(int pos) override;
 
-    sf::Vector2i Size() const {
-        return {(int)syms_.getSize(), (int)qs_.size()};
-    }
+    void EraseColumn(int pos) override;
 
-    void EraseQ(std::string q) {
-        ended_ = false;
-        reserved_tape_.reset();
-        int to_del = std::stoi(q.substr(1));
-        size_t ind = std::find(qs_.begin(), qs_.end(), to_del) - qs_.begin();
-        if (ind == qs_.size()) return;
-        std::lock_guard guard(change_table_);
-        qs_.erase(qs_.begin() + ind);
-        std::for_each(table_.begin(), table_.end(), [ind] (std::vector<ValueOfTable> &v) {
-            v.erase(v.begin() + ind);
-        });
-    }
+    sf::Uint32 Read(int pos);
 
-    void EraseSym(char to_del) {
-        if (ended_) return;
-        reserved_tape_.reset();
-        size_t ind = syms_.find(to_del);
-        if (ind == std::string::npos) return;
+    void SetCallBacks(std::function<void()> cb_move_r, std::function<void()> cb_move_l);
 
-        std::lock_guard guard(change_table_);
-        syms_.erase(ind);
-        table_.erase(table_.begin() + ind);
-    }
+    void Do1Tick();
 
-    sf::String Read(int pos) {
-        return (tape_.count(pos) ? tape_[pos] : lambda);
-    }
+    bool CorrSym(sf::Uint32 sym) const;
 
-    void SetCallBacks(std::function<void()> cb_move_r, std::function<void()> cb_move_l) {
-        cb_move_l_ = std::move(cb_move_l);
-        cb_move_r_ = std::move(cb_move_r);
-    }
+    void Reset();
 
-    void Do1Tick() {
-        if (ended_ || !CanDoTick()) return;
-        if (!reserved_tape_.has_value()) {
-            reserved_tape_ = tape_;
-        }
+    sf::String GetColumnName(int pos) const override;
 
-        ValueOfTable val = table_[syms_.find(Read(cur_pos_in_tape))][cur_q_];
-        if (val.to_write.has_value()) {
-            tape_[cur_pos_in_tape] = *val.to_write;
-        }
-
-        if (val.move == ValueOfTable::Move::MOVE_LEFT) {
-            --cur_pos_in_tape;
-            cb_move_l_();
-        } else if (val.move == ValueOfTable::Move::MOVE_RIGHT) {
-            ++cur_pos_in_tape;
-            cb_move_r_();
-        }
-
-        cur_q_ = val.q;
-        if (val.term) {
-            ended_ = true;
-        }
-    }
-
-    bool CorrSym(sf::Uint32 sym) const {
-        return syms_.find(sym) != std::string::npos;
-    }
-
-    void Reset() {
-        if (reserved_tape_.has_value()) {
-            tape_ = *reserved_tape_;
-        }
-    }
+    sf::String GetLineName(int pos) const override;
 
 private:
     // table_[x][y], x - sym, y - q
     int cur_pos_in_tape = 0;
     size_t cur_q_ = 0;
+    size_t last_q_ = -1;
     std::function<void()> cb_move_l_, cb_move_r_;
-    sf::Vector2f table_size_;
-    sf::String syms_;
-    std::vector<int> qs_;
-    std::map<int, sf::String> tape_;
-    std::vector<std::vector<ValueOfTable>> table_;
-    std::optional<std::map<int, sf::String>> reserved_tape_;
+    ordered_set<sf::Uint32> syms_;
+    ordered_set<int> qs_;
+    std::map<int, sf::Uint32> tape_;
+    std::map<sf::Uint32, std::map<int, ValueOfTable>> table_;
+    std::optional<std::map<int, sf::Uint32>> reserved_tape_;
     mutable std::mutex change_table_;
     bool ended_ = false;
 
-    bool CanDoTick() const {
-        return std::any_of(table_.begin(), table_.end(), [] (const std::vector<ValueOfTable> &v) {
-            return std::any_of(v.begin(), v.end(), [] (const ValueOfTable &val) {
-                return val.term;
-            });
-        });
-    }
+    bool CanDoTick() const;
 };
