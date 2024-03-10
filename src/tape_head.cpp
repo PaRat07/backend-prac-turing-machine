@@ -45,7 +45,7 @@ void TapeHead::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     convex.setPoint(2, sf::Vector2f(win_size.x / 2 - 15, y_pos_ + 30));
     convex.setFillColor(sf::Color::Transparent);
     convex.setOutlineThickness(3);
-    convex.setOutlineColor(on_primary_color);
+    convex.setOutlineColor(on_primary);
     if (animation_.has_value()) {
         auto cur_time = std::chrono::steady_clock::now();
         if (cur_time >= animation_->end_time) {

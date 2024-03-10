@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 
+#include "../app/colors.h"
 #include "../app/general_data.h"
 
 class CenterPositionedString : public sf::Drawable {
@@ -20,7 +21,7 @@ class CenterPositionedString : public sf::Drawable {
         text_color_ = color;
     }
  private:
-    sf::Color text_color_ = on_primary_container_color;
+    sf::Color text_color_ = on_primary_container;
     sf::String data_;
     sf::Vector2f pos_ = { 0, 0 };
 };

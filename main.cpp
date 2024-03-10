@@ -6,16 +6,6 @@
 #include "elements/tape_head.h"
 #include "elements/rounded_rectangle.h"
 
-sf::Font font = LoadFont("../app/Roboto-Regular.ttf");
-float letter_size = 20.f;
-sf::Color background_color = sf::Color(21, 18, 24);
-sf::Color primary_color = sf::Color(210, 188, 253);
-sf::Color on_primary_color = sf::Color(56, 38, 92);
-sf::Color primary_container_color = sf::Color(79, 61, 116);
-sf::Color on_primary_container_color = sf::Color(152, 147, 218);
-sf::Color outline_color = sf::Color(73, 69, 78);
-sf::Color surface_container = sf::Color(29, 27, 32);
-sf::Color on_surface_container = sf::Color(203, 196, 207);
 
 
 sf::Vector2f win_size = {1000, 1000};

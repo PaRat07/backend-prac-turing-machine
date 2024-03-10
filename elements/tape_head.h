@@ -4,6 +4,7 @@
 
 #include "../app/window.h"
 #include "../app/general_data.h"
+#include "../app/colors.h"
 
 class TapeHead : public AbstractElement {
     struct Animation {

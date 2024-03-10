@@ -18,9 +18,10 @@ add_executable(prac
         src/button.cpp
         src/center_positioned_string.cpp
         src/general_data.cpp
-        src/inoutput_field.cpp
         src/window_manager.cpp
         elements/tape_head.h
-        src/tape_head.cpp)
+        src/tape_head.cpp
+        app/colors.h
+        src/colors.cpp)
 
 target_link_libraries(prac PRIVATE sfml-graphics)

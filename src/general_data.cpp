@@ -4,5 +4,9 @@
 sf::Font LoadFont(std::string path) {
     sf::Font ans;
     ans.loadFromFile(path);
+    std::cout << "sdjhbfjhbsdf" << std::endl;
     return ans;
 }
+
+sf::Font font = LoadFont("../app/Roboto-Regular.ttf");
+float letter_size = 20.f;

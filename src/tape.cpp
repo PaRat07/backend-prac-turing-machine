@@ -59,7 +59,7 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     // up+down
     {
         sf::RectangleShape line;
-        line.setFillColor(outline_color);
+        line.setFillColor(outline);
         line.setSize(sf::Vector2f(win_size.x, 2));
 
         line.setPosition(0, y_pos_);
@@ -72,7 +72,7 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     // sep
     {
         sf::RectangleShape line;
-        line.setFillColor(outline_color);
+        line.setFillColor(outline);
 
         line.setSize(sf::Vector2f(2, cell_size.y));
         for (int x = (int)(pos_in_ + win_size.x / 2) % cell_size.x + cell_size.x / 2; x < win_size.x; x += cell_size.x) {
@@ -94,7 +94,7 @@ void Tape::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     // active
     if (active_pos_.has_value()) {
         sf::RectangleShape rect((sf::Vector2f(cell_size.x - 2, cell_size.y - 2)));
-        rect.setFillColor(primary_color);
+        rect.setFillColor(primary);
         rect.setPosition(*active_pos_ * cell_size.x + (pos_in_ + win_size.x / 2) - cell_size.x / 2 + 2, y_pos_ + 2);
         target.draw(rect);
     }

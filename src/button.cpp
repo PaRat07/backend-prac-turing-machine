@@ -4,7 +4,7 @@ void ButtonWithImage::draw(sf::RenderTarget &target, sf::RenderStates states) co
     RoundedRectangleShape<5> rect(size_);
     rect.setPosition(pos_);
     rect.setOutlineThickness(0);
-    rect.setFillColor(primary_container_color);
+    rect.setFillColor(primary_container);
     rect.setPosition(pos_);
     target.draw(rect);
 
@@ -41,14 +41,14 @@ void ButtonWithTextRelativePos::draw(sf::RenderTarget &target, sf::RenderStates 
     sf::Vector2f real_size(size_.x * win_size.x, size_.y * win_size.y);
     RoundedRectangleShape<5> rect(real_size);
     rect.setOutlineThickness(0);
-    rect.setFillColor(primary_container_color);
+    rect.setFillColor(primary_container);
     rect.setPosition(real_pos);
     target.draw(rect);
 
 
     CenterPositionedString str;
     str.setString(text_);
-    str.setTextColor(on_primary_container_color);
+    str.setTextColor(on_primary_container);
     str.setPosition(sf::Vector2f(real_pos.x + real_size.x / 2, real_pos.y + real_size.y / 2));
     target.draw(str);
 }
@@ -73,14 +73,14 @@ ButtonWithTextRelativePos::ButtonWithTextRelativePos(sf::Vector2f pos, sf::Vecto
 void ButtonWithTextAbsPos::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     RoundedRectangleShape<5> rect(size_);
     rect.setOutlineThickness(0);
-    rect.setFillColor(primary_container_color);
+    rect.setFillColor(primary_container);
     rect.setPosition(pos_);
     target.draw(rect);
 
 
     CenterPositionedString str;
     str.setString(text_);
-    str.setTextColor(on_primary_container_color);
+    str.setTextColor(on_primary_container);
     str.setPosition(sf::Vector2f(pos_.x + size_.x / 2, pos_.y + size_.y / 2));
     target.draw(str);
 }
