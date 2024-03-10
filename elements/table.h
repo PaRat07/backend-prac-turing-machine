@@ -44,7 +44,7 @@ private:
     mutable std::mutex buttons_syms_mutex_;
     mutable std::vector<ButtonWithTextAbsPos> buttons_qs_;
     mutable std::mutex buttons_qs_mutex_;
-    std::optional<InputField<sf::RectangleShape>> field;
+    std::optional<InputField> field;
 
     sf::Vector2i GetTableSize() const;
 };

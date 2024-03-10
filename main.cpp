@@ -91,8 +91,9 @@ int main() {
     {
         win_table.AddElement(std::make_unique<TableElement>(sf::Vector2f(10, 10), sf::Vector2f(800, 980), machine));
 
-        std::unique_ptr<InputField<RoundedRectangleShape<10>>> scan = std::make_unique<InputField<RoundedRectangleShape<10>>>(sf::Vector2f(820, 10),
-                                                                                                                              sf::Vector2f(170, 40));
+        std::unique_ptr<InputField> scan = std::make_unique<InputField>(sf::Vector2f(820, 10),
+                                                                        sf::Vector2f(170, 40),
+                                                                        "New sym");
 
         auto sym_adder = [&scanner = *scan, &machine] () {
             machine.AddColumn(scanner.GetText()[0]);

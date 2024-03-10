@@ -213,7 +213,8 @@ void TableElement::ProcessEvent(sf::Event event) {
                                     (event.mouseButton.y - pos_in_.y - 14 - cell_size.y) / cell_size.y - 1);
                 field.emplace(sf::Vector2f(active_pos_->x * cell_size.x + pos_in_.x + 2,
                                                 active_pos_->y * cell_size.y + pos_in_.y + 2),
-                              sf::Vector2f(cell_size.x - 2, cell_size.y - 2));
+                              sf::Vector2f(cell_size.x - 2, cell_size.y - 2),
+                              "Value");
                 field->Activate();
             } else {
                 field.reset();

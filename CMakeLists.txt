@@ -22,6 +22,7 @@ add_executable(prac
         elements/tape_head.h
         src/tape_head.cpp
         app/colors.h
-        src/colors.cpp)
+        src/colors.cpp
+        src/inoutput_field.cpp)
 
 target_link_libraries(prac PRIVATE sfml-graphics)
