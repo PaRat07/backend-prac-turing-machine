@@ -56,21 +56,24 @@ public:
                         *state.cur_num *= 10;
                         *state.cur_num += to_pares_[0] - '0';
                     } else if (to_pares_[0] >= 'a' && to_pares_[0] <= 'z') {
-                        if (state.prev == Prev::NOTHING ||
-                            state.prev == Prev::CARET && !state.cur_num.has_value()) {
-                            throw std::invalid_argument("Unexpected letter at position " + std::to_string(data_.size() - to_pares_.size()));
-                        }
-                        if (state.prev == Prev::CARET) {
-                            state.cur_ans.powers[state.cur_letter - 'a'] = (state.cur_num.has_value() ? *state.cur_num : 1);
-                            state.cur_num.reset();
-                        } else if (state.prev == Prev::LETTER) {
-                            state.cur_ans.powers[state.cur_letter - 'a'] = 1;
-                        } else if (state.prev == Prev::SIGN) {
-                            state.cur_ans.factor = *state.cur_num;
-                            if (!state.is_gr0) {
-                                state.cur_ans.factor *= -1;
-                            }
-                            state.cur_num.reset();
+                        switch (state.prev) {
+                            case Prev::CARET:
+                                if (state.cur_num.has_value()) {
+                                    state.cur_ans.powers[state.cur_letter - 'a'] = (state.cur_num.has_value() ? *state.cur_num : 1);
+                                    state.cur_num.reset();
+                                    break;
+                                }
+                            case Prev::NOTHING:
+                                throw std::invalid_argument("Unexpected letter at position " + std::to_string(data_.size() - to_pares_.size()));
+                            case Prev::LETTER:
+                                state.cur_ans.powers[state.cur_letter - 'a'] = 1;
+                                break;
+                            case Prev::SIGN:
+                                state.cur_ans.factor = *state.cur_num;
+                                if (!state.is_gr0) {
+                                    state.cur_ans.factor *= -1;
+                                }
+                                state.cur_num.reset();
                         }
                         state.cur_letter = to_pares_[0];
                         state.prev = Prev::LETTER;
